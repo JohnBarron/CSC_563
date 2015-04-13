@@ -10,10 +10,10 @@ import java.lang.Thread;
 public class AstroidsWindow extends Frame{
     private static final Toolkit toolkit = Toolkit.getDefaultToolkit();
     private static final Dimension screenSize = toolkit.getScreenSize();
-    private int numShips = 0;
+    private int numShips = 1;
     private int numStars = 0;
-    private int numPlanets = 100;
-    private int numCoins = 0;
+    private int numPlanets = 0;
+    private int numCoins = 10;
     private PhysicsSpace s1 = new PhysicsSpace(numShips, numStars, numPlanets, numCoins);
     private int focusPlanetIndex;
     //PhysicsSpace s1 = new PhysicsSpace();
