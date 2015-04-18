@@ -28,18 +28,14 @@ public class Ship {
         xLoc = 150;
         yLoc = 250;
         xSpeed = 0;
-        ySpeed = 0;
+        ySpeed = 0.01;
         thrust = 0;
         xAcceleration = 0;
         yAcceleration = 0;
         thrustAngle = 0;
         mass = -1;
         color = new Color(78,255,0);
-        fuel = 10;
-//        starMass = 1;
-//        starX = 250.0;
-//        starY = 250.0;
-//        g = 0;
+        fuel = 1;
     }
     
     public void setThrustAngle(double a){

@@ -11,7 +11,7 @@ public class AstroidsWindow extends Frame{
     private static final Toolkit toolkit = Toolkit.getDefaultToolkit();
     private static final Dimension screenSize = toolkit.getScreenSize();
     private int numShips = 1;
-    private int numStars = 0;
+    private int numStars = 1;
     private int numPlanets = 0;
     private int numCoins = 10;
     private PhysicsSpace s1 = new PhysicsSpace(numShips, numStars, numPlanets, numCoins);
@@ -21,7 +21,7 @@ public class AstroidsWindow extends Frame{
     private Image dbImage; // For double buffer
     private Graphics dbg;
     private javax.swing.Timer timer, frameTimer;
-    public static int timerDelay = 16;
+    public static int timerDelay = 8;
     public static final double speedFactor = 8;
     private int frameTimerDelay = 16;
     private boolean trails = false;
@@ -36,57 +36,53 @@ public class AstroidsWindow extends Frame{
         setLocation(0, 0);
         setUndecorated(true);
         addWindowListener(new WindowAdapter() {
-
             public void windowClosing(WindowEvent e) {
                 System.exit(0);
             }
         });
-        
-        // draw first state of Ship
 
         // Register the window with a keyboard listener
-        //if(numShips == 1){
         addKeyListener(new keyListener());
         addMouseListener(new MousePressListener());
-        //}
         //addMouseMotionListener(new MouseMoveListener());
-        //addMouseListener(new MousePressListener());
         
         ActionListener forceTimer = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 s1.simStep();//PhysicsSpace.move();
-//                for (i = 0; i < numPlanets; i++) {
-//                    s1.getPlanet()[i].getxLoc();
-//                    s1.getPlanet()[i].getyLoc();
-//                    s1.window.getX();
-//                    if(s1.getPlanet()[i].getxLoc() < s1.window.getX() && s1.getPlanet()[i].getxSpeed() < 0){
-//                        s1.getPlanet()[i].setxSpeed(s1.getPlanet()[i].getxSpeed() * -1);
-//                    } if(s1.getPlanet()[i].getyLoc() < s1.window.getY() && s1.getPlanet()[i].getySpeed() < 0){
-//                        s1.getPlanet()[i].setySpeed(s1.getPlanet()[i].getySpeed() * -1);
-//                    } if(s1.getPlanet()[i].getxLoc() >= s1.window.getX() + s1.window.getWindowWidth() && s1.getPlanet()[i].getxSpeed() > 0){
-//                        s1.getPlanet()[i].setxSpeed(s1.getPlanet()[i].getxSpeed() * -1);
-//                    } if(s1.getPlanet()[i].getyLoc() >= s1.window.getY() + s1.window.getWindowHeight() && s1.getPlanet()[i].getySpeed() > 0){
-//                        s1.getPlanet()[i].setySpeed(s1.getPlanet()[i].getySpeed() * -1);
-//                    }
-//                }
-//                for (i = 0; i < numShips; i++) {
-//                    s1.getShip()[i].getxLoc();
-//                    s1.getShip()[i].getyLoc();
-//                    s1.window.getX();
-//                    if(s1.getShip()[i].getxLoc() < s1.window.getX() && s1.getShip()[i].getxSpeed() < 0){
-//                        s1.getShip()[i].setxSpeed(s1.getShip()[i].getxSpeed() * -1);
-//                    } if(s1.getShip()[i].getyLoc() < s1.window.getY() && s1.getShip()[i].getySpeed() < 0){
-//                        s1.getShip()[i].setySpeed(s1.getShip()[i].getySpeed() * -1);
-//                    } if(s1.getShip()[i].getxLoc() >= s1.window.getX() + s1.window.getWindowWidth() && s1.getShip()[i].getxSpeed() > 0){
-//                        s1.getShip()[i].setxSpeed(s1.getShip()[i].getxSpeed() * -1);
-//                    } if(s1.getShip()[i].getyLoc() >= s1.window.getY() + s1.window.getWindowHeight() && s1.getShip()[i].getySpeed() > 0){
-//                        s1.getShip()[i].setySpeed(s1.getShip()[i].getySpeed() * -1);
-//                    }
-//                }
+                for (i = 0; i < numPlanets; i++) {
+                    s1.getPlanet()[i].getxLoc();
+                    s1.getPlanet()[i].getyLoc();
+                    s1.window.getX();
+                    if(s1.getPlanet()[i].getxLoc() < s1.window.getX() && s1.getPlanet()[i].getxSpeed() < 0){
+                        s1.getPlanet()[i].setxSpeed(s1.getPlanet()[i].getxSpeed() * -1);
+                    } if(s1.getPlanet()[i].getyLoc() < s1.window.getY() && s1.getPlanet()[i].getySpeed() < 0){
+                        s1.getPlanet()[i].setySpeed(s1.getPlanet()[i].getySpeed() * -1);
+                    } if(s1.getPlanet()[i].getxLoc() >= s1.window.getX() + s1.window.getWindowWidth() && s1.getPlanet()[i].getxSpeed() > 0){
+                        s1.getPlanet()[i].setxSpeed(s1.getPlanet()[i].getxSpeed() * -1);
+                    } if(s1.getPlanet()[i].getyLoc() >= s1.window.getY() + s1.window.getWindowHeight() && s1.getPlanet()[i].getySpeed() > 0){
+                        s1.getPlanet()[i].setySpeed(s1.getPlanet()[i].getySpeed() * -1);
+                    }
+                }
+                for (i = 0; i < numShips; i++) {
+                    s1.getShip()[i].getxLoc();
+                    s1.getShip()[i].getyLoc();
+                    s1.window.getX();
+                    if(s1.getShip()[i].getxLoc() < s1.window.getX() && s1.getShip()[i].getxSpeed() < 0){
+                        s1.getShip()[i].setxSpeed(s1.getShip()[i].getxSpeed() * -1);
+                    } if(s1.getShip()[i].getyLoc() < s1.window.getY() && s1.getShip()[i].getySpeed() < 0){
+                        s1.getShip()[i].setySpeed(s1.getShip()[i].getySpeed() * -1);
+                    } if(s1.getShip()[i].getxLoc() >= s1.window.getX() + s1.window.getWindowWidth() && s1.getShip()[i].getxSpeed() > 0){
+                        s1.getShip()[i].setxSpeed(s1.getShip()[i].getxSpeed() * -1);
+                    } if(s1.getShip()[i].getyLoc() >= s1.window.getY() + s1.window.getWindowHeight() && s1.getShip()[i].getySpeed() > 0){
+                        s1.getShip()[i].setySpeed(s1.getShip()[i].getySpeed() * -1);
+                    }
+                }
                 //repaint();//moved to slower timer
             }
         };
         ActionListener repaintTimer = new ActionListener(){
+            //Client should have a repaintTimer every 16 ms
+            //Server should have an updateClientsTimer instead, at least as frequent
             public void actionPerformed(ActionEvent e){
                 repaint();
             }
@@ -173,7 +169,14 @@ public class AstroidsWindow extends Frame{
             g.fillOval(xPixel-5, yPixel-5, 10, 10);
         }
         for (i = 0; i < numStars; i++) {
+            //g.setColor(s1.getStar()[i].getColor());
+            g.setColor(Color.WHITE);
+            xPixel = s1.window.xPixel(s1.getStar()[i].getxLoc());
+            yPixel = s1.window.yPixel(s1.getStar()[i].getyLoc());
             //s1.getStar()[i].draw(g);
+            g.fillOval(xPixel-20, yPixel-20, 40, 40);
+            //TODO: make things have zizes instead of magic constant 40
+            //Also use SpaceToWindow to scale the size based on zoom (maybe sometimes)
         }
         for(i=0; i < numPlanets; i++){
             //s1.getPlanet()[i].draw(g);
@@ -201,20 +204,10 @@ public class AstroidsWindow extends Frame{
     
     private class keyListener extends KeyAdapter {
         char c;
-        /*public void keyTyped(KeyEvent e) {
-            c = e.getKeyChar();
-            if (c == 's') {
-                s1.setThrustAngle(3 * Math.PI / 2);
-            } else if (c == 'a') {
-                s1.setThrustAngle(Math.PI);
-            } else if (c == 'w') {
-                s1.setThrustAngle(Math.PI/2);
-            } else if (c == 'd') {
-                s1.setThrustAngle(0.0);
-            }
-        }
-        */
         public void keyPressed(KeyEvent e){
+            //assume that only 1 key is pressed at a time
+            //TODO: optionally make it work with multiple keys pressed
+            //      as a player would expect ex. 'w' and 'd' makes angle = PI/4
             c = e.getKeyChar();
             if (numShips > 0) {
                 if(c == 's') {

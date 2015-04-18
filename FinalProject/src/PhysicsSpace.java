@@ -43,7 +43,7 @@ public class PhysicsSpace {
     }
     
     public PhysicsSpace(int numShips, int numStars, int numPlanets, int numCoins){
-        G = 1;
+        G = 16;
         window = new SpaceToWindow();
         this.numShips = numShips;
         this.numStars = numStars;// exeptions for bad numbers
@@ -144,6 +144,11 @@ public class PhysicsSpace {
                 gAngle = org.apache.commons.math.util.FastMath.atan2(ship[i].getyLoc()-star[j].getyLoc(), ship[i].getxLoc()-star[j].getxLoc());
                 ship[i].setxAcceleration(ship[i].getxAcceleration() + g * org.apache.commons.math.util.FastMath.cos(gAngle));
                 ship[i].setyAcceleration(ship[i].getyAcceleration() + g * org.apache.commons.math.util.FastMath.sin(gAngle));
+                if(org.apache.commons.math.util.FastMath.sqrt((ship[i].getxLoc() - coin[j].getxLoc()) * (ship[i].getxLoc() - coin[j].getxLoc()) + (ship[i].getyLoc() - coin[j].getyLoc()) * (ship[i].getyLoc() - coin[j].getyLoc())) < 10){
+                    //collision with ship and star
+                    //game over for Ship[i]
+                    //TODO: make gameOver() method
+                }
             }
             for(j=0; j<numPlanets; j++){// ship-planet interactions
                 // force from planet acting on ship:
