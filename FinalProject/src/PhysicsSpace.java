@@ -145,6 +145,7 @@ public class PhysicsSpace {
                 ship[i].setxAcceleration(ship[i].getxAcceleration() + g * org.apache.commons.math.util.FastMath.cos(gAngle));
                 ship[i].setyAcceleration(ship[i].getyAcceleration() + g * org.apache.commons.math.util.FastMath.sin(gAngle));
                 if(org.apache.commons.math.util.FastMath.sqrt((ship[i].getxLoc() - coin[j].getxLoc()) * (ship[i].getxLoc() - coin[j].getxLoc()) + (ship[i].getyLoc() - coin[j].getyLoc()) * (ship[i].getyLoc() - coin[j].getyLoc())) < 10){
+                    //TODO: replace magic constant 10 with a sum of sizes / 2
                     //collision with ship and star
                     //game over for Ship[i]
                     //TODO: make gameOver() method

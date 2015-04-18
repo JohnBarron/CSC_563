@@ -29,6 +29,7 @@ public class AstroidsWindow extends Frame{
     private boolean planetFocus = false;
     
     private int i, xPixel, yPixel;
+    private int tempSize;
     
     public AstroidsWindow() {
         super("Astroids");
@@ -48,7 +49,8 @@ public class AstroidsWindow extends Frame{
         
         ActionListener forceTimer = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                s1.simStep();//PhysicsSpace.move();
+                s1.simStep();
+                //The following for blocks make ships and planets bounce off the edges of the screen.
                 for (i = 0; i < numPlanets; i++) {
                     s1.getPlanet()[i].getxLoc();
                     s1.getPlanet()[i].getyLoc();
@@ -94,45 +96,7 @@ public class AstroidsWindow extends Frame{
         frameTimer.start();
         setVisible(true);
     }
-    
-//    public void run(){
-//
-//        addWindowListener(new WindowAdapter() {
-//
-//            public void windowClosing(WindowEvent e) {
-//                System.exit(0);
-//            }
-//        });
-//        
-//        // draw first state of Ship
-//
-//        // Register the window with a keyboard listener
-//        //if(numShips == 1){
-//        addKeyListener(new keyListener());
-//        //}
-//        //addMouseMotionListener(new MouseMoveListener());
-//        //addMouseListener(new MousePressListener());
-//        
-//        ActionListener forceTimer = new ActionListener() {
-//            public void actionPerformed(ActionEvent e) {
-//                s1.simStep();//PhysicsSpace.move();
-//                //repaint();//moved to slower timer
-//            }
-//        };
-//        ActionListener repaintTimer = new ActionListener(){
-//            public void actionPerformed(ActionEvent e){
-//                repaint();
-//            }
-//        };
-//        timer = new Timer(timerDelay, forceTimer);
-//        frameTimer = new Timer(frameTimerDelay, repaintTimer);
-//        //timer.setInitialDelay(initialDelay);
-//        timer.start();
-//        frameTimer.start();
-//        setVisible(true);
-//    }
-    
-    
+
     // Override update() to do double buffering instead of clearing the screen at every repaint()
     public void update(Graphics g) {
         if (dbImage == null) {
@@ -149,34 +113,22 @@ public class AstroidsWindow extends Frame{
     
     public void paint(Graphics g) {
         super.paint(g);
-        
-        //if(planetFocus){
-        //    s1.window.setX(s1.getPlanet()[focusPlanetIndex].getxLoc());
-        //    s1.window.setY(s1.getPlanet()[focusPlanetIndex].getyLoc());
-        //}
-        //g.setColor(Color.blue);
-        //g.setColor(new Color(78,255,0));// each object to draw should draw itself
-        //g.drawOval(s1.ship[0].getxPixel(), s1.ship[0].getyPixel(), 10, 10);
-        //     s1.getShip()[0].draw(g);//for() all the ships, stars, planets, etc
-        //     s1.getStar()[0].draw(g);
         for (i = 0; i < numShips; i++) {
             //s1.getShip()[i].draw(g);
             g.setColor(s1.getShip()[i].getColor()/*new Color(78,255,0)*/);
-            //g.drawOval(xPixel, yPixel, 10, 10);
             xPixel = s1.window.xPixel(s1.getShip()[i].getxLoc());
             yPixel = s1.window.yPixel(s1.getShip()[i].getyLoc());
-            //g.drawLine(xPixel, yPixel, xPixel, yPixel);
-            g.fillOval(xPixel-5, yPixel-5, 10, 10);
+            tempSize = s1.getShip()[i].getSize();
+            g.fillOval(xPixel-tempSize/2, yPixel-tempSize/2, tempSize, tempSize);
         }
         for (i = 0; i < numStars; i++) {
-            //g.setColor(s1.getStar()[i].getColor());
-            g.setColor(Color.WHITE);
+            g.setColor(s1.getStar()[i].getColor());
+            //g.setColor(Color.WHITE);
             xPixel = s1.window.xPixel(s1.getStar()[i].getxLoc());
             yPixel = s1.window.yPixel(s1.getStar()[i].getyLoc());
             //s1.getStar()[i].draw(g);
-            g.fillOval(xPixel-20, yPixel-20, 40, 40);
-            //TODO: make things have zizes instead of magic constant 40
-            //Also use SpaceToWindow to scale the size based on zoom (maybe sometimes)
+            tempSize = s1.getStar()[i].getSize();
+            g.fillOval(xPixel-tempSize/2, yPixel-tempSize/2, tempSize, tempSize);
         }
         for(i=0; i < numPlanets; i++){
             //s1.getPlanet()[i].draw(g);
@@ -269,6 +221,8 @@ public class AstroidsWindow extends Frame{
             } else if(c == 'f'){
                 timerDelay *= 2;
                 timer.setDelay(timerDelay);
+            } else if(c == 'p'){
+                System.exit(0);
             }
         }
         

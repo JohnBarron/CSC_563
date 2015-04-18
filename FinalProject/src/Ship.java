@@ -17,6 +17,7 @@ public class Ship {
     private Color color;
     private double fuel; // units sim timer tics of standard thrust
     private double fuelColor;
+    private int size;//diameter
 //    private double g;
     // to be moved:
 //    private double starMass;
@@ -36,6 +37,7 @@ public class Ship {
         mass = -1;
         color = new Color(78,255,0);
         fuel = 1;
+        size = 10;
     }
     
     public void setThrustAngle(double a){
@@ -70,6 +72,9 @@ public class Ship {
     }
     public double getyLoc(){
         return yLoc;
+    }
+    public int getSize(){
+        return size;
     }
     
     public double getMass(){
