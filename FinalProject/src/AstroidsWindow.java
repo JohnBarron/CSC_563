@@ -10,14 +10,13 @@ import java.lang.Thread;
 public class AstroidsWindow extends Frame{
     private static final Toolkit toolkit = Toolkit.getDefaultToolkit();
     private static final Dimension screenSize = toolkit.getScreenSize();
+    public static final int width = (int)screenSize.getWidth(), height = (int)screenSize.getHeight();
     private int numShips = 1;
     private int numStars = 1;
     private int numPlanets = 0;
     private int numCoins = 10;
     private PhysicsSpace s1 = new PhysicsSpace(numShips, numStars, numPlanets, numCoins);
     private int focusPlanetIndex;
-    //PhysicsSpace s1 = new PhysicsSpace();
-    public static final int width = (int)screenSize.getWidth(), height = (int)screenSize.getHeight();
     private Image dbImage; // For double buffer
     private Graphics dbg;
     private javax.swing.Timer timer, frameTimer;

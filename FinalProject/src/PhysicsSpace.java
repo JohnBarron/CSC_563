@@ -15,7 +15,7 @@ public class PhysicsSpace {
     private Random rng;
     int i = 0, j = 0;
     double g, gAngle;
-    double G;
+    double G; //Like the universal gravitational constant of physics
     //double currentPairDistance;
     //double orbitDistanceDelta;
     //double orbitDistanceThreshold;
@@ -138,15 +138,26 @@ public class PhysicsSpace {
                 g = G * /*AstroidsWindow.forwards**/-1.0 * g / ship[j].getMass() * ship[i].getMass();
                 ship[j].setxAcceleration(ship[j].getxAcceleration() + g * org.apache.commons.math.util.FastMath.cos(gAngle));
                 ship[j].setyAcceleration(ship[j].getyAcceleration() + g * org.apache.commons.math.util.FastMath.sin(gAngle));
+                if(org.apache.commons.math.util.FastMath.sqrt((ship[i].getxLoc() - ship[j].getxLoc()) * (ship[i].getxLoc() - ship[j].getxLoc()) + (ship[i].getyLoc() - ship[j].getyLoc()) * (ship[i].getyLoc() - ship[j].getyLoc())) < ship[i].getSize() + ship[j].getSize()){
+                    //i.e. If the distance between the 2 ships is less than the sum of their radii
+                    //Then there is a collision
+                    //elastically bounce
+                    //
+                    //gAngle is the angle of the line between the 2 ships.
+                    //Write the velocities of the ships in the basis of gAngle and the perpendicular angle.
+                    //Do nothing to the component of velocity in the perpendicular direction
+                    //Reverse (-1*) the component of velocity in the gAngle direction
+                    //Apply to the horizontal-vertical basis
+                }
             }
             for(j=0; j<numStars; j++){// ship-star interactions
                 g = G * /*AstroidsWindow.forwards**/-1.0*star[j].getMass()/((star[j].getxLoc()-ship[i].getxLoc())*(star[j].getxLoc()-ship[i].getxLoc())+(star[j].getyLoc()-ship[i].getyLoc())*(star[j].getyLoc()-ship[i].getyLoc()));
                 gAngle = org.apache.commons.math.util.FastMath.atan2(ship[i].getyLoc()-star[j].getyLoc(), ship[i].getxLoc()-star[j].getxLoc());
                 ship[i].setxAcceleration(ship[i].getxAcceleration() + g * org.apache.commons.math.util.FastMath.cos(gAngle));
                 ship[i].setyAcceleration(ship[i].getyAcceleration() + g * org.apache.commons.math.util.FastMath.sin(gAngle));
-                if(org.apache.commons.math.util.FastMath.sqrt((ship[i].getxLoc() - coin[j].getxLoc()) * (ship[i].getxLoc() - coin[j].getxLoc()) + (ship[i].getyLoc() - coin[j].getyLoc()) * (ship[i].getyLoc() - coin[j].getyLoc())) < 10){
-                    //TODO: replace magic constant 10 with a sum of sizes / 2
-                    //collision with ship and star
+                if(org.apache.commons.math.util.FastMath.sqrt((ship[i].getxLoc() - star[j].getxLoc()) * (ship[i].getxLoc() - star[j].getxLoc()) + (ship[i].getyLoc() - star[j].getyLoc()) * (ship[i].getyLoc() - star[j].getyLoc())) < ship[i].getSize() + star[j].getSize()){
+                    //i.e. If the distance between the ship and the star is less than the sum of their radii
+                    //Then there is a collision with the ship and the star
                     //game over for Ship[i]
                     //TODO: make gameOver() method
                 }
