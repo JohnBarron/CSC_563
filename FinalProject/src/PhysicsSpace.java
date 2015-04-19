@@ -43,7 +43,7 @@ public class PhysicsSpace {
     }
     
     public PhysicsSpace(int numShips, int numStars, int numPlanets, int numCoins){
-        G = 16;
+        G = 32;
         window = new SpaceToWindow();
         this.numShips = numShips;
         this.numStars = numStars;// exeptions for bad numbers
@@ -206,7 +206,7 @@ public class PhysicsSpace {
         }
         for(i=0; i<numShips; i++){// ship-coin interactions
             for(j=0; j<numCoins; j++){
-                if(org.apache.commons.math.util.FastMath.sqrt((ship[i].getxLoc() - coin[j].getxLoc()) * (ship[i].getxLoc() - coin[j].getxLoc()) + (ship[i].getyLoc() - coin[j].getyLoc()) * (ship[i].getyLoc() - coin[j].getyLoc())) < 10){
+                if(org.apache.commons.math.util.FastMath.sqrt((ship[i].getxLoc() - coin[j].getxLoc()) * (ship[i].getxLoc() - coin[j].getxLoc()) + (ship[i].getyLoc() - coin[j].getyLoc()) * (ship[i].getyLoc() - coin[j].getyLoc())) < ship[i].getSize() + coin[j].getSize()){
                     ship[i].setFuel(ship[i].getFuel() + 1);
                     coin[j] = new Coin();
                 }

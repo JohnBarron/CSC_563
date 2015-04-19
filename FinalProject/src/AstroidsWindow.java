@@ -20,8 +20,8 @@ public class AstroidsWindow extends Frame{
     private Image dbImage; // For double buffer
     private Graphics dbg;
     private javax.swing.Timer timer, frameTimer;
-    public static int timerDelay = 8;
-    public static final double speedFactor = 8;
+    public static int timerDelay = 16;
+    public static final double speedFactor = 16;
     private int frameTimerDelay = 16;
     private boolean trails = false;
     public static boolean forwards = true;
@@ -118,7 +118,7 @@ public class AstroidsWindow extends Frame{
             xPixel = s1.window.xPixel(s1.getShip()[i].getxLoc());
             yPixel = s1.window.yPixel(s1.getShip()[i].getyLoc());
             tempSize = s1.getShip()[i].getSize();
-            g.fillOval(xPixel-tempSize/2, yPixel-tempSize/2, tempSize, tempSize);
+            g.fillOval(xPixel-tempSize, yPixel-tempSize, tempSize*2, tempSize*2);
         }
         for (i = 0; i < numStars; i++) {
             g.setColor(s1.getStar()[i].getColor());
@@ -127,7 +127,7 @@ public class AstroidsWindow extends Frame{
             yPixel = s1.window.yPixel(s1.getStar()[i].getyLoc());
             //s1.getStar()[i].draw(g);
             tempSize = s1.getStar()[i].getSize();
-            g.fillOval(xPixel-tempSize/2, yPixel-tempSize/2, tempSize, tempSize);
+            g.fillOval(xPixel-tempSize, yPixel-tempSize, tempSize*2, tempSize*2);
         }
         for(i=0; i < numPlanets; i++){
             //s1.getPlanet()[i].draw(g);
@@ -145,7 +145,8 @@ public class AstroidsWindow extends Frame{
             g.setColor(s1.getCoin()[i].getColor());
             xPixel = s1.window.xPixel(s1.getCoin()[i].getxLoc());
             yPixel = s1.window.yPixel(s1.getCoin()[i].getyLoc());
-            g.drawOval(xPixel-5, yPixel-5, 10, 10);
+            tempSize = s1.getCoin()[i].getSize();
+            g.drawOval(xPixel-tempSize, yPixel-tempSize, tempSize*2, tempSize*2);
         }
 //        s1.getStar()[1].draw(g);
 //        s1.getStar()[2].draw(g);
@@ -163,16 +164,16 @@ public class AstroidsWindow extends Frame{
             if (numShips > 0) {
                 if(c == 's') {
                     s1.getShip()[0].setThrustAngle(3 * Math.PI / 2);
-                    s1.getShip()[0].setThrust(.001);
+                    s1.getShip()[0].setThrustMaximum();
                 } else if(c == 'a') {
                     s1.getShip()[0].setThrustAngle(Math.PI);
-                    s1.getShip()[0].setThrust(.001);
+                    s1.getShip()[0].setThrustMaximum();
                 } else if(c == 'w') {
                     s1.getShip()[0].setThrustAngle(Math.PI / 2);
-                    s1.getShip()[0].setThrust(.001);
+                    s1.getShip()[0].setThrustMaximum();
                 } else if(c == 'd') {
                     s1.getShip()[0].setThrustAngle(0.0);
-                    s1.getShip()[0].setThrust(.001);
+                    s1.getShip()[0].setThrustMaximum();
                 }
             } else {
                 if(c == 'a'){

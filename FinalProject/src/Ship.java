@@ -10,6 +10,7 @@ public class Ship {
     private double xSpeed; // units pixels per sim timer tic
     private double ySpeed;
     private double thrust;
+    private double maxThrust;
     private double xAcceleration;
     private double yAcceleration;
     private double thrustAngle;
@@ -17,13 +18,8 @@ public class Ship {
     private Color color;
     private double fuel; // units sim timer tics of standard thrust
     private double fuelColor;
-    private int size;//diameter
-//    private double g;
-    // to be moved:
-//    private double starMass;
-//    private double starX;
-//    private double starY;
-//    private double gAngle;
+    private int size;//radius
+    private boolean isAlive;
     
     public Ship(){
         xLoc = 150;
@@ -31,13 +27,15 @@ public class Ship {
         xSpeed = 0;
         ySpeed = 0.01;
         thrust = 0;
+        maxThrust = 0.002;
         xAcceleration = 0;
         yAcceleration = 0;
         thrustAngle = 0;
         mass = -1;
         color = new Color(78,255,0);
         fuel = 1;
-        size = 10;
+        size = 5;
+        isAlive = true;
     }
     
     public void setThrustAngle(double a){
@@ -46,6 +44,10 @@ public class Ship {
     
     public void setThrust(double t){
         thrust = t;
+    }
+    
+    public void setThrustMaximum(){
+        thrust = maxThrust;
     }
     
     public void setxAcceleration(double a){

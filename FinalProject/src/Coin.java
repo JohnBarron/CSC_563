@@ -5,6 +5,7 @@ public class Coin {
     private double xLoc;
     private double yLoc;
     private Color color;
+    private int size;
     private Random rng;
     
     public Coin() {
@@ -12,11 +13,13 @@ public class Coin {
         xLoc = rng.nextInt(AstroidsWindow.width);
         yLoc = rng.nextInt(AstroidsWindow.height);
         color = Color.YELLOW;
+        size = 5;
     }
     public Coin(double x, double y){
         xLoc = x;
         yLoc = y;
         color = Color.YELLOW;
+        size = 5;
     }
     
     public double getxLoc(){
@@ -27,5 +30,8 @@ public class Coin {
     }
     public Color getColor(){
         return color;
+    }
+    public int getSize(){
+        return size;
     }
 }

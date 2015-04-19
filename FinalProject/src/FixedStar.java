@@ -17,7 +17,7 @@ public class FixedStar {
         yPixel = AstroidsWindow.height/2;
         mass = 1;
         color = Color.WHITE;
-        size = 40;
+        size = 20;
     }
     
     public FixedStar(double x, double y, double m){
