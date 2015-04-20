@@ -68,13 +68,13 @@ public class AstroidsWindow extends Frame{
                     s1.getShip()[i].getxLoc();
                     s1.getShip()[i].getyLoc();
                     s1.window.getX();
-                    if(s1.getShip()[i].getxLoc() < s1.window.getX() && s1.getShip()[i].getxSpeed() < 0){
+                    if(s1.getShip()[i].getxLoc() - s1.getShip()[i].getSize() < s1.window.getX() && s1.getShip()[i].getxSpeed() < 0){
                         s1.getShip()[i].setxSpeed(s1.getShip()[i].getxSpeed() * -1);
-                    } if(s1.getShip()[i].getyLoc() < s1.window.getY() && s1.getShip()[i].getySpeed() < 0){
+                    } if(s1.getShip()[i].getyLoc() - s1.getShip()[i].getSize() < s1.window.getY() && s1.getShip()[i].getySpeed() < 0){
                         s1.getShip()[i].setySpeed(s1.getShip()[i].getySpeed() * -1);
-                    } if(s1.getShip()[i].getxLoc() >= s1.window.getX() + s1.window.getWindowWidth() && s1.getShip()[i].getxSpeed() > 0){
+                    } if(s1.getShip()[i].getxLoc() + s1.getShip()[i].getSize() >= s1.window.getX() + s1.window.getWindowWidth() && s1.getShip()[i].getxSpeed() > 0){
                         s1.getShip()[i].setxSpeed(s1.getShip()[i].getxSpeed() * -1);
-                    } if(s1.getShip()[i].getyLoc() >= s1.window.getY() + s1.window.getWindowHeight() && s1.getShip()[i].getySpeed() > 0){
+                    } if(s1.getShip()[i].getyLoc() + s1.getShip()[i].getSize() >= s1.window.getY() + s1.window.getWindowHeight() && s1.getShip()[i].getySpeed() > 0){
                         s1.getShip()[i].setySpeed(s1.getShip()[i].getySpeed() * -1);
                     }
                 }
