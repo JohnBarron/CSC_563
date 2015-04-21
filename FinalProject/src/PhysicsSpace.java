@@ -44,7 +44,7 @@ public class PhysicsSpace {
     
     public PhysicsSpace(int numShips, int numStars, int numPlanets, int numCoins){
         G = 32;
-        window = new SpaceToWindow();
+        window = new SpaceToWindow(0, 0, AstroidsWindow.arenaWidth, AstroidsWindow.arenaHeight);
         this.numShips = numShips;
         this.numStars = numStars;// exeptions for bad numbers
         this.numPlanets = numPlanets;
@@ -75,8 +75,8 @@ public class PhysicsSpace {
             star[2] = new FixedStar(1200, 400, 1);
         }
         for(i=0; i<numPlanets; i++){
-            x = rng.nextInt(AstroidsWindow.width / 4) + AstroidsWindow.width * 3 / 8;
-            y = rng.nextInt(AstroidsWindow.height / 4) + AstroidsWindow.height * 3 / 8;
+            x = rng.nextInt(AstroidsWindow.arenaWidth / 4) + AstroidsWindow.arenaWidth * 3 / 8;
+            y = rng.nextInt(AstroidsWindow.arenaHeight / 4) + AstroidsWindow.arenaHeight * 3 / 8;
             //x = rng.nextInt(AstroidsWindow.width);
             //y = rng.nextInt(AstroidsWindow.height);
             //x = (int)(rng.nextGaussian() * .5 - 1) * AstroidsWindow.width;

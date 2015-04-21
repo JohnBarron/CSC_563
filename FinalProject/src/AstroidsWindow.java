@@ -11,6 +11,12 @@ public class AstroidsWindow extends Frame{
     private static final Toolkit toolkit = Toolkit.getDefaultToolkit();
     private static final Dimension screenSize = toolkit.getScreenSize();
     public static final int width = (int)screenSize.getWidth(), height = (int)screenSize.getHeight();
+    public static final int arenaHeight = height;
+    public static final int arenaWidth = height;
+    public static final int HUDheight = height; //not sure if these should all be public static final
+    public static final int HUDwidth = width - height; //Assume width > height
+    private static final int HUDy = 0, HUDx = width - HUDwidth;
+    //The game arena is now a square of size height, with room on the right of the screen for the heads up display (HUD).
     private int numShips = 1;
     private int numStars = 1;
     private int numPlanets = 0;
@@ -136,8 +142,8 @@ public class AstroidsWindow extends Frame{
             xPixel = s1.window.xPixel(s1.getPlanet()[i].getxLoc());
             yPixel = s1.window.yPixel(s1.getPlanet()[i].getyLoc());
             if(planetFocus && i == focusPlanetIndex){
-                s1.window.panRight(xPixel - width / 2);
-                s1.window.panDown(yPixel - height / 2);
+                s1.window.panRight(xPixel - arenaWidth / 2);
+                s1.window.panDown(yPixel - arenaHeight / 2);
             }
             g.drawLine(xPixel, yPixel, xPixel, yPixel);
         }
@@ -148,6 +154,11 @@ public class AstroidsWindow extends Frame{
             tempSize = s1.getCoin()[i].getSize();
             g.drawOval(xPixel-tempSize, yPixel-tempSize, tempSize*2, tempSize*2);
         }
+        
+        //Paint the HUD:
+        g.setColor(Color.WHITE);
+        g.drawLine(HUDx, HUDy, HUDx, HUDheight);
+        g.drawString("Fuel: " + s1.getShip()[0].getFuel(), HUDx + 10, HUDy + 100);
 //        s1.getStar()[1].draw(g);
 //        s1.getStar()[2].draw(g);
     }
@@ -243,8 +254,8 @@ public class AstroidsWindow extends Frame{
                     s1.getShip()[0].setThrust(.001);
                 } else {
                     planetFocus = false;
-                    s1.window.panRight(e.getX() - width / 2);
-                    s1.window.panDown(e.getY() - height / 2);
+                    s1.window.panRight(e.getX() - arenaWidth / 2);
+                    s1.window.panDown(e.getY() - arenaHeight / 2);
                 }
             } else if(e.getButton() == MouseEvent.BUTTON3){
                 if(numShips <= 0){

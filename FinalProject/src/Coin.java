@@ -10,8 +10,8 @@ public class Coin {
     
     public Coin() {
         rng = new Random();
-        xLoc = rng.nextInt(AstroidsWindow.width);
-        yLoc = rng.nextInt(AstroidsWindow.height);
+        xLoc = rng.nextInt(AstroidsWindow.arenaWidth);
+        yLoc = rng.nextInt(AstroidsWindow.arenaHeight);
         color = Color.YELLOW;
         size = 5;
     }

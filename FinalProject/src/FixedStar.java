@@ -11,10 +11,10 @@ public class FixedStar {
     private int size;
     
     public FixedStar(){
-        xLoc = AstroidsWindow.width/2;
-        yLoc = AstroidsWindow.height/2;
-        xPixel = AstroidsWindow.width/2;
-        yPixel = AstroidsWindow.height/2;
+        xLoc = AstroidsWindow.arenaWidth/2;
+        yLoc = AstroidsWindow.arenaHeight/2;
+        xPixel = AstroidsWindow.arenaWidth/2;
+        yPixel = AstroidsWindow.arenaHeight/2;
         mass = 1;
         color = Color.WHITE;
         size = 20;

@@ -39,16 +39,16 @@ public class SpaceToWindow {
     }
     
     public void panLeft(double x){
-        X -= x * windowWidth / AstroidsWindow.width;
+        X -= x * windowWidth / AstroidsWindow.arenaWidth;
     }
     public void panRight(double x){
-        X += x * windowWidth / AstroidsWindow.width;
+        X += x * windowWidth / AstroidsWindow.arenaWidth;
     }
     public void panUp(double y){
-        Y += y * windowHeight / AstroidsWindow.height;
+        Y += y * windowHeight / AstroidsWindow.arenaHeight;
     }
     public void panDown(double y){
-        Y -= y * windowHeight / AstroidsWindow.height;
+        Y -= y * windowHeight / AstroidsWindow.arenaHeight;
     }
     
     public void zoom(double scalingFactor){
@@ -67,15 +67,15 @@ public class SpaceToWindow {
     }
     
     public int xPixel(double x){
-        return (int)((x - X) * AstroidsWindow.width / windowWidth);
+        return (int)((x - X) * AstroidsWindow.arenaWidth / windowWidth);
     }
     public int yPixel(double y){
-        return (int)(AstroidsWindow.height - (y - Y) * AstroidsWindow.height / windowHeight);
+        return (int)(AstroidsWindow.height - (y - Y) * AstroidsWindow.arenaHeight / windowHeight);
     }
     public double xLoc(int xPixel){
-        return (double)(xPixel * windowWidth / AstroidsWindow.width + X);
+        return (double)(xPixel * windowWidth / AstroidsWindow.arenaWidth + X);
     }
     public double yLoc(int yPixel){
-        return (double)((AstroidsWindow.height - yPixel) * windowHeight / AstroidsWindow.height + Y);
+        return (double)((AstroidsWindow.height - yPixel) * windowHeight / AstroidsWindow.arenaHeight + Y);
     }
 }
