@@ -20,7 +20,7 @@ public class AstroidsWindow extends Frame{
     private int numShips = 1;
     private int numStars = 1;
     private int numPlanets = 0;
-    private int numCoins = 100;
+    private int numCoins = 101;
     private PhysicsSpace s1 = new PhysicsSpace(numShips, numStars, numPlanets, numCoins);
     private int focusPlanetIndex;
     private Image dbImage; // For double buffer
