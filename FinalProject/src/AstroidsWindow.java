@@ -17,10 +17,10 @@ public class AstroidsWindow extends Frame{
     public static final int HUDwidth = width - height; //Assume width > height
     private static final int HUDy = 0, HUDx = width - HUDwidth;
     //The game arena is now a square of size height, with room on the right of the screen for the heads up display (HUD).
-    private int numShips = 1;
+    private int numShips = 2;
     private int numStars = 1;
     private int numPlanets = 0;
-    private int numCoins = 101;
+    private int numCoins = 10;
     private PhysicsSpace s1 = new PhysicsSpace(numShips, numStars, numPlanets, numCoins);
     private int focusPlanetIndex;
     private Image dbImage; // For double buffer
@@ -32,6 +32,7 @@ public class AstroidsWindow extends Frame{
     private boolean trails = false;
     public static boolean forwards = true;
     private boolean planetFocus = false;
+    private boolean bouncyEdges = true;
     
     private int i, xPixel, yPixel;
     private int tempSize;
@@ -55,33 +56,41 @@ public class AstroidsWindow extends Frame{
         ActionListener forceTimer = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 s1.simStep();
-                //The following for blocks make ships and planets bounce off the edges of the screen.
-                for (i = 0; i < numPlanets; i++) {
-                    s1.getPlanet()[i].getxLoc();
-                    s1.getPlanet()[i].getyLoc();
-                    s1.window.getX();
-                    if(s1.getPlanet()[i].getxLoc() < s1.window.getX() && s1.getPlanet()[i].getxSpeed() < 0){
-                        s1.getPlanet()[i].setxSpeed(s1.getPlanet()[i].getxSpeed() * -1);
-                    } if(s1.getPlanet()[i].getyLoc() < s1.window.getY() && s1.getPlanet()[i].getySpeed() < 0){
-                        s1.getPlanet()[i].setySpeed(s1.getPlanet()[i].getySpeed() * -1);
-                    } if(s1.getPlanet()[i].getxLoc() >= s1.window.getX() + s1.window.getWindowWidth() && s1.getPlanet()[i].getxSpeed() > 0){
-                        s1.getPlanet()[i].setxSpeed(s1.getPlanet()[i].getxSpeed() * -1);
-                    } if(s1.getPlanet()[i].getyLoc() >= s1.window.getY() + s1.window.getWindowHeight() && s1.getPlanet()[i].getySpeed() > 0){
-                        s1.getPlanet()[i].setySpeed(s1.getPlanet()[i].getySpeed() * -1);
+                if (bouncyEdges) {
+                    //The following for blocks make ships and planets bounce off the edges of the screen.
+                    for (i = 0; i < numPlanets; i++) {
+                        s1.getPlanet()[i].getxLoc();
+                        s1.getPlanet()[i].getyLoc();
+                        s1.window.getX();
+                        if (s1.getPlanet()[i].getxLoc() < s1.window.getX() && s1.getPlanet()[i].getxSpeed() < 0) {
+                            s1.getPlanet()[i].setxSpeed(s1.getPlanet()[i].getxSpeed() * -1);
+                        }
+                        if (s1.getPlanet()[i].getyLoc() < s1.window.getY() && s1.getPlanet()[i].getySpeed() < 0) {
+                            s1.getPlanet()[i].setySpeed(s1.getPlanet()[i].getySpeed() * -1);
+                        }
+                        if (s1.getPlanet()[i].getxLoc() >= s1.window.getX() + s1.window.getWindowWidth() && s1.getPlanet()[i].getxSpeed() > 0) {
+                            s1.getPlanet()[i].setxSpeed(s1.getPlanet()[i].getxSpeed() * -1);
+                        }
+                        if (s1.getPlanet()[i].getyLoc() >= s1.window.getY() + s1.window.getWindowHeight() && s1.getPlanet()[i].getySpeed() > 0) {
+                            s1.getPlanet()[i].setySpeed(s1.getPlanet()[i].getySpeed() * -1);
+                        }
                     }
-                }
-                for (i = 0; i < numShips; i++) {
-                    s1.getShip()[i].getxLoc();
-                    s1.getShip()[i].getyLoc();
-                    s1.window.getX();
-                    if(s1.getShip()[i].getxLoc() - s1.getShip()[i].getSize() < s1.window.getX() && s1.getShip()[i].getxSpeed() < 0){
-                        s1.getShip()[i].setxSpeed(s1.getShip()[i].getxSpeed() * -1);
-                    } if(s1.getShip()[i].getyLoc() - s1.getShip()[i].getSize() < s1.window.getY() && s1.getShip()[i].getySpeed() < 0){
-                        s1.getShip()[i].setySpeed(s1.getShip()[i].getySpeed() * -1);
-                    } if(s1.getShip()[i].getxLoc() + s1.getShip()[i].getSize() >= s1.window.getX() + s1.window.getWindowWidth() && s1.getShip()[i].getxSpeed() > 0){
-                        s1.getShip()[i].setxSpeed(s1.getShip()[i].getxSpeed() * -1);
-                    } if(s1.getShip()[i].getyLoc() + s1.getShip()[i].getSize() >= s1.window.getY() + s1.window.getWindowHeight() && s1.getShip()[i].getySpeed() > 0){
-                        s1.getShip()[i].setySpeed(s1.getShip()[i].getySpeed() * -1);
+                    for (i = 0; i < numShips; i++) {
+                        s1.getShip()[i].getxLoc();
+                        s1.getShip()[i].getyLoc();
+                        s1.window.getX();
+                        if (s1.getShip()[i].getxLoc() - s1.getShip()[i].getSize() < s1.window.getX() && s1.getShip()[i].getxSpeed() < 0) {
+                            s1.getShip()[i].setxSpeed(s1.getShip()[i].getxSpeed() * -1);
+                        }
+                        if (s1.getShip()[i].getyLoc() - s1.getShip()[i].getSize() < s1.window.getY() && s1.getShip()[i].getySpeed() < 0) {
+                            s1.getShip()[i].setySpeed(s1.getShip()[i].getySpeed() * -1);
+                        }
+                        if (s1.getShip()[i].getxLoc() + s1.getShip()[i].getSize() >= s1.window.getX() + s1.window.getWindowWidth() && s1.getShip()[i].getxSpeed() > 0) {
+                            s1.getShip()[i].setxSpeed(s1.getShip()[i].getxSpeed() * -1);
+                        }
+                        if (s1.getShip()[i].getyLoc() + s1.getShip()[i].getSize() >= s1.window.getY() + s1.window.getWindowHeight() && s1.getShip()[i].getySpeed() > 0) {
+                            s1.getShip()[i].setySpeed(s1.getShip()[i].getySpeed() * -1);
+                        }
                     }
                 }
                 //repaint();//moved to slower timer
@@ -156,9 +165,11 @@ public class AstroidsWindow extends Frame{
         }
         
         //Paint the HUD:
-        g.setColor(Color.WHITE);
-        g.drawLine(HUDx, HUDy, HUDx, HUDheight);
-        g.drawString("Fuel: " + s1.getShip()[0].getFuel(), HUDx + 10, HUDy + 100);
+        if (numShips > 0) {
+            g.setColor(Color.WHITE);
+            g.drawLine(HUDx, HUDy, HUDx, HUDheight);
+            g.drawString("Fuel: " + s1.getShip()[0].getFuel(), HUDx + 10, HUDy + 100);
+        }
 //        s1.getStar()[1].draw(g);
 //        s1.getStar()[2].draw(g);
     }
@@ -185,6 +196,21 @@ public class AstroidsWindow extends Frame{
                 } else if(c == 'd') {
                     s1.getShip()[0].setThrustAngle(0.0);
                     s1.getShip()[0].setThrustMaximum();
+                }
+                if (numShips > 1) {
+                    if (c == 'k') {
+                        s1.getShip()[1].setThrustAngle(3 * Math.PI / 2);
+                        s1.getShip()[1].setThrustMaximum();
+                    } else if (c == 'j') {
+                        s1.getShip()[1].setThrustAngle(Math.PI);
+                        s1.getShip()[1].setThrustMaximum();
+                    } else if (c == 'i') {
+                        s1.getShip()[1].setThrustAngle(Math.PI / 2);
+                        s1.getShip()[1].setThrustMaximum();
+                    } else if (c == 'l') {
+                        s1.getShip()[1].setThrustAngle(0.0);
+                        s1.getShip()[1].setThrustMaximum();
+                    }
                 }
             } else {
                 if(c == 'a'){
@@ -240,6 +266,9 @@ public class AstroidsWindow extends Frame{
         public void keyReleased(KeyEvent e){
             if(numShips > 0){
                 s1.getShip()[0].setThrust(0.0);
+                if(numShips > 1){
+                    s1.getShip()[1].setThrust(0.0);
+                }
             }
         }
     }

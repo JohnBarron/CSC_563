@@ -11,7 +11,7 @@ public class PhysicsSpace {
     private double minDistanceToCursor;
     private double dTemp; // used in findNearestPlanet()
     private int numShips, numStars, numPlanets, numCoins;
-    public SpaceToWindow window;
+    SpaceToWindow window;
     private Random rng;
     int i = 0, j = 0;
     double g, gAngle;
@@ -61,6 +61,10 @@ public class PhysicsSpace {
         double m;
         if(numShips == 1){
             ship[0] = new Ship();
+        }
+        if(numShips == 2){
+            ship[0] = new Ship();
+            ship[1] = new Ship(2);
         }
         if(numStars == 1){
             star[0] = new FixedStar();
@@ -130,12 +134,12 @@ public class PhysicsSpace {
         for(i=0; i<numShips; i++){
             for(j=i+1; j<numShips; j++){// ship-ship interactions
                 // force from ship[j] acting on ship[i]:
-                g = G * /*AstroidsWindow.forwards**/-1.0*ship[j].getMass()/((ship[j].getxLoc()-ship[i].getxLoc())*(ship[j].getxLoc()-ship[i].getxLoc())+(ship[j].getyLoc()-ship[i].getyLoc())*(ship[j].getyLoc()-ship[i].getyLoc()));
-                gAngle = org.apache.commons.math.util.FastMath.atan2(ship[i].getyLoc()-ship[j].getyLoc(), ship[i].getxLoc()-ship[j].getxLoc());
+                g = G * /*AstroidsWindow.forwards*-1.0**/ship[j].getMass()/((ship[j].getxLoc()-ship[i].getxLoc())*(ship[j].getxLoc()-ship[i].getxLoc())+(ship[j].getyLoc()-ship[i].getyLoc())*(ship[j].getyLoc()-ship[i].getyLoc()));
+                gAngle = org.apache.commons.math.util.FastMath.atan2(ship[j].getyLoc()-ship[i].getyLoc(), ship[j].getxLoc()-ship[i].getxLoc());
                 ship[i].setxAcceleration(ship[i].getxAcceleration() + g * org.apache.commons.math.util.FastMath.cos(gAngle));
                 ship[i].setyAcceleration(ship[i].getyAcceleration() + g * org.apache.commons.math.util.FastMath.sin(gAngle));
                 // force from ship[i] acting on ship[j]:
-                g = G * /*AstroidsWindow.forwards**/-1.0 * g / ship[j].getMass() * ship[i].getMass();
+                g = /*AstroidsWindow.forwards**/-1.0 * g / ship[j].getMass() * ship[i].getMass();
                 ship[j].setxAcceleration(ship[j].getxAcceleration() + g * org.apache.commons.math.util.FastMath.cos(gAngle));
                 ship[j].setyAcceleration(ship[j].getyAcceleration() + g * org.apache.commons.math.util.FastMath.sin(gAngle));
                 if(org.apache.commons.math.util.FastMath.sqrt((ship[i].getxLoc() - ship[j].getxLoc()) * (ship[i].getxLoc() - ship[j].getxLoc()) + (ship[i].getyLoc() - ship[j].getyLoc()) * (ship[i].getyLoc() - ship[j].getyLoc())) < ship[i].getSize() + ship[j].getSize()){
@@ -151,8 +155,8 @@ public class PhysicsSpace {
                 }
             }
             for(j=0; j<numStars; j++){// ship-star interactions
-                g = G * /*AstroidsWindow.forwards**/-1.0*star[j].getMass()/((star[j].getxLoc()-ship[i].getxLoc())*(star[j].getxLoc()-ship[i].getxLoc())+(star[j].getyLoc()-ship[i].getyLoc())*(star[j].getyLoc()-ship[i].getyLoc()));
-                gAngle = org.apache.commons.math.util.FastMath.atan2(ship[i].getyLoc()-star[j].getyLoc(), ship[i].getxLoc()-star[j].getxLoc());
+                g = G * /*AstroidsWindow.forwards*-1.0**/star[j].getMass()/((star[j].getxLoc()-ship[i].getxLoc())*(star[j].getxLoc()-ship[i].getxLoc())+(star[j].getyLoc()-ship[i].getyLoc())*(star[j].getyLoc()-ship[i].getyLoc()));
+                gAngle = org.apache.commons.math.util.FastMath.atan2(star[j].getyLoc()-ship[i].getyLoc(), star[j].getxLoc()-ship[i].getxLoc());
                 ship[i].setxAcceleration(ship[i].getxAcceleration() + g * org.apache.commons.math.util.FastMath.cos(gAngle));
                 ship[i].setyAcceleration(ship[i].getyAcceleration() + g * org.apache.commons.math.util.FastMath.sin(gAngle));
                 if(org.apache.commons.math.util.FastMath.sqrt((ship[i].getxLoc() - star[j].getxLoc()) * (ship[i].getxLoc() - star[j].getxLoc()) + (ship[i].getyLoc() - star[j].getyLoc()) * (ship[i].getyLoc() - star[j].getyLoc())) < ship[i].getSize() + star[j].getSize()){
@@ -164,12 +168,12 @@ public class PhysicsSpace {
             }
             for(j=0; j<numPlanets; j++){// ship-planet interactions
                 // force from planet acting on ship:
-                g = G * /*AstroidsWindow.forwards**/-1.0*planet[j].getMass()/((planet[j].getxLoc()-ship[i].getxLoc())*(planet[j].getxLoc()-ship[i].getxLoc())+(planet[j].getyLoc()-ship[i].getyLoc())*(planet[j].getyLoc()-ship[i].getyLoc()));
+                g = G * /*AstroidsWindow.forwards*-1.0**/planet[j].getMass()/((planet[j].getxLoc()-ship[i].getxLoc())*(planet[j].getxLoc()-ship[i].getxLoc())+(planet[j].getyLoc()-ship[i].getyLoc())*(planet[j].getyLoc()-ship[i].getyLoc()));
                 gAngle = org.apache.commons.math.util.FastMath.atan2(ship[i].getyLoc()-planet[j].getyLoc(), ship[i].getxLoc()-planet[j].getxLoc());
                 ship[i].setxAcceleration(ship[i].getxAcceleration() + g * org.apache.commons.math.util.FastMath.cos(gAngle));
                 ship[i].setyAcceleration(ship[i].getyAcceleration() + g * org.apache.commons.math.util.FastMath.sin(gAngle));
                 // force from ship acting on planet:
-                g = G * /*AstroidsWindow.forwards**/-1.0 * g / planet[j].getMass() * ship[i].getMass();
+                g = /*AstroidsWindow.forwards**/-1.0 * g / planet[j].getMass() * ship[i].getMass();
                 planet[j].setxAcceleration(planet[j].getxAcceleration() + g * org.apache.commons.math.util.FastMath.cos(gAngle));
                 planet[j].setyAcceleration(planet[j].getyAcceleration() + g * org.apache.commons.math.util.FastMath.sin(gAngle));
             }
@@ -178,8 +182,8 @@ public class PhysicsSpace {
             for(j=i+1; j<numPlanets; j++){
                 // force from planet[j] acting on planet[i]:
                 //currentPairDistance = distance(planet[i].getxLoc(), planet[i].getyLoc(), planet[j].getxLoc(), planet[j].getyLoc());
-              //  g = G * /*AstroidsWindow.forwards**/(-1.0)*planet[j].getMass()/(currentPairDistance*currentPairDistance); //((planet[j].getxLoc()-planet[i].getxLoc())*(planet[j].getxLoc()-planet[i].getxLoc())+(planet[j].getyLoc()-planet[i].getyLoc())*(planet[j].getyLoc()-planet[i].getyLoc()));
-                gAngle = org.apache.commons.math.util.FastMath.atan2(planet[i].getyLoc()-planet[j].getyLoc(), planet[i].getxLoc()-planet[j].getxLoc());
+                g = G * /*AstroidsWindow.forwards*(-1.0)**/planet[j].getMass()/*(currentPairDistance*currentPairDistance);*/ / ((planet[j].getxLoc()-planet[i].getxLoc())*(planet[j].getxLoc()-planet[i].getxLoc())+(planet[j].getyLoc()-planet[i].getyLoc())*(planet[j].getyLoc()-planet[i].getyLoc()));
+                gAngle = org.apache.commons.math.util.FastMath.atan2(planet[j].getyLoc()-planet[i].getyLoc(), planet[j].getxLoc()-planet[i].getxLoc());
                 //if(previousAngle[i][j] != 0 && (gAngle < 0 && previousAngle[i][j] >= 0) || (gAngle >= 0 && previousAngle[i][j] < 0)){
                     // if the pair of planets has come full circle:
                 //    orbitDistanceDelta = currentPairDistance - previousPeriodDistance[i][j];
@@ -192,13 +196,13 @@ public class PhysicsSpace {
                 planet[i].setxAcceleration(planet[i].getxAcceleration() + g * org.apache.commons.math.util.FastMath.cos(gAngle));
                 planet[i].setyAcceleration(planet[i].getyAcceleration() + g * org.apache.commons.math.util.FastMath.sin(gAngle));
                 // force from planet[i] acting on planet[j]:
-                g = G * /*AstroidsWindow.forwards**/-1.0 * g / planet[j].getMass() * planet[i].getMass();
+                g = /*AstroidsWindow.forwards**/-1.0 * g / planet[j].getMass() * planet[i].getMass();
                 planet[j].setxAcceleration(planet[j].getxAcceleration() + g * org.apache.commons.math.util.FastMath.cos(gAngle));
                 planet[j].setyAcceleration(planet[j].getyAcceleration() + g * org.apache.commons.math.util.FastMath.sin(gAngle));
           //      previousAngle[i][j] = gAngle;
             }
             for(j=0; j<numStars; j++){// planet-star interactions
-                g = G * /*AstroidsWindow.forwards**/-1.0*star[j].getMass()/((star[j].getxLoc()-planet[i].getxLoc())*(star[j].getxLoc()-planet[i].getxLoc())+(star[j].getyLoc()-planet[i].getyLoc())*(star[j].getyLoc()-planet[i].getyLoc()));
+                g = G * /*AstroidsWindow.forwards*-1.0**/star[j].getMass()/((star[j].getxLoc()-planet[i].getxLoc())*(star[j].getxLoc()-planet[i].getxLoc())+(star[j].getyLoc()-planet[i].getyLoc())*(star[j].getyLoc()-planet[i].getyLoc()));
                 gAngle = org.apache.commons.math.util.FastMath.atan2(planet[i].getyLoc()-star[j].getyLoc(), planet[i].getxLoc()-star[j].getxLoc());
                 planet[i].setxAcceleration(planet[i].getxAcceleration() + g * org.apache.commons.math.util.FastMath.cos(gAngle));
                 planet[i].setyAcceleration(planet[i].getyAcceleration() + g * org.apache.commons.math.util.FastMath.sin(gAngle));

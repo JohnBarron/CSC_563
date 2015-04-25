@@ -25,14 +25,33 @@ public class Ship {
         xLoc = 150;
         yLoc = 250;
         xSpeed = 0;
-        ySpeed = 0.01;
+        ySpeed = 0.1;
         thrust = 0;
         maxThrust = 0.002;
         xAcceleration = 0;
         yAcceleration = 0;
         thrustAngle = 0;
-        mass = -1;
+        mass = 1;
         color = new Color(78,255,0);
+        fuel = 1;
+        size = 5;
+        isAlive = true;
+    }
+    
+    public Ship(int playerNum){
+        if (playerNum == 2) {
+            xLoc = 1000;
+            yLoc = 1000;
+            color = new Color(255,78,0);
+        }
+        xSpeed = 0;
+        ySpeed = -0.1;
+        thrust = 0;
+        maxThrust = 0.002;
+        xAcceleration = 0;
+        yAcceleration = 0;
+        thrustAngle = 0;
+        mass = 1;
         fuel = 1;
         size = 5;
         isAlive = true;
@@ -145,7 +164,7 @@ public class Ship {
         } else if(fuelColor < 0){
             fuelColor = 0;
         }
-        color = new Color(255 - (int)fuelColor,(int)fuelColor,0);
+        //color = new Color(255 - (int)fuelColor,(int)fuelColor,0);
         //xAcceleration += thrust * org.apache.commons.math.util.FastMath.cos(thrustAngle);
         //yAcceleration += thrust * org.apache.commons.math.util.FastMath.sin(thrustAngle);
         //xSpeed += AstroidsWindow.forwards*xAcceleration;

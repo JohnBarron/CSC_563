@@ -15,7 +15,7 @@ public class FixedStar {
         yLoc = AstroidsWindow.arenaHeight/2;
         xPixel = AstroidsWindow.arenaWidth/2;
         yPixel = AstroidsWindow.arenaHeight/2;
-        mass = 1;
+        mass = 2;
         color = Color.WHITE;
         size = 20;
     }
