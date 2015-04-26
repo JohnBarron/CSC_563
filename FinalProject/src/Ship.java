@@ -34,7 +34,7 @@ public class Ship {
         mass = 1;
         color = new Color(78,255,0);
         fuel = 1;
-        size = 5;
+        size = 20;
         isAlive = true;
     }
     
@@ -53,8 +53,27 @@ public class Ship {
         thrustAngle = 0;
         mass = 1;
         fuel = 1;
-        size = 5;
+        size = 20;
         isAlive = true;
+    }
+    
+    public void bounce(double angle){
+        // Elastically bounce in the direction of angle - Math.PI/2.
+        // i.e. reflect off a mirror oriented at angle.
+        // i.e. reverse the component of velocity perpendicular to the angle,
+        // keeping the component of veloctiy parallel to angle the same.
+        //xSpeed += 2 * Math.abs(xSpeed) * org.apache.commons.math.util.FastMath.cos(angle);
+        //ySpeed += 2 * Math.abs(ySpeed) * org.apache.commons.math.util.FastMath.sin(angle);
+        xSpeed = xSpeed * org.apache.commons.math.util.FastMath.cos(2*angle) + ySpeed * org.apache.commons.math.util.FastMath.sin(2*angle);
+        ySpeed = xSpeed * org.apache.commons.math.util.FastMath.sin(2*angle) - ySpeed * org.apache.commons.math.util.FastMath.cos(2*angle);
+    }
+
+    public double getThrust() {
+        return thrust;
+    }
+    
+    public double getThrustAngle() {
+        return thrustAngle;
     }
     
     public void setThrustAngle(double a){
@@ -93,6 +112,14 @@ public class Ship {
     }
     public double getyLoc(){
         return yLoc;
+    }
+
+    public void setxLoc(double xLoc) {
+        this.xLoc = xLoc;
+    }
+
+    public void setyLoc(double yLoc) {
+        this.yLoc = yLoc;
     }
     public int getSize(){
         return size;
@@ -135,24 +162,24 @@ public class Ship {
         //yAcceleration += thrust * java.lang.Math.sin(thrustAngle);// + g * java.lang.Math.sin(gAngle);
         
         if(AstroidsWindow.forwards){
-            fuel -= thrust;
+            fuel -= getThrust();
             
-            xAcceleration += thrust * org.apache.commons.math.util.FastMath.cos(thrustAngle);
-            yAcceleration += thrust * org.apache.commons.math.util.FastMath.sin(thrustAngle);
+            xAcceleration += getThrust() * org.apache.commons.math.util.FastMath.cos(getThrustAngle());
+            yAcceleration += getThrust() * org.apache.commons.math.util.FastMath.sin(getThrustAngle());
             
             xSpeed += xAcceleration;
             ySpeed += yAcceleration;
             
-            xLoc += /*AstroidsWindow.timerDelay * */AstroidsWindow.speedFactor * xSpeed;
-            yLoc += /*AstroidsWindow.timerDelay * */AstroidsWindow.speedFactor * ySpeed;
+            setxLoc(xLoc + AstroidsWindow.speedFactor * xSpeed);
+            setyLoc(yLoc + AstroidsWindow.speedFactor * ySpeed);
         } else {
-            fuel += thrust;
+            fuel += getThrust();
             
-            xAcceleration -= thrust * org.apache.commons.math.util.FastMath.cos(thrustAngle);
-            yAcceleration -= thrust * org.apache.commons.math.util.FastMath.sin(thrustAngle);
+            xAcceleration -= getThrust() * org.apache.commons.math.util.FastMath.cos(getThrustAngle());
+            yAcceleration -= getThrust() * org.apache.commons.math.util.FastMath.sin(getThrustAngle());
             
-            xLoc -= /*AstroidsWindow.timerDelay * */AstroidsWindow.speedFactor * xSpeed;
-            yLoc -= /*AstroidsWindow.timerDelay * */AstroidsWindow.speedFactor * ySpeed;
+            setxLoc(xLoc - AstroidsWindow.speedFactor * xSpeed);
+            setyLoc(yLoc - AstroidsWindow.speedFactor * ySpeed);
             
             xSpeed -= xAcceleration;
             ySpeed -= yAcceleration;

@@ -54,14 +54,13 @@ public class AstroidsWindow extends Frame{
         //addMouseMotionListener(new MouseMoveListener());
         
         ActionListener forceTimer = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                s1.simStep();
+            public void actionPerformed(ActionEvent e){
                 if (bouncyEdges) {
                     //The following for blocks make ships and planets bounce off the edges of the screen.
                     for (i = 0; i < numPlanets; i++) {
-                        s1.getPlanet()[i].getxLoc();
-                        s1.getPlanet()[i].getyLoc();
-                        s1.window.getX();
+                        //s1.getPlanet()[i].getxLoc();
+                        //s1.getPlanet()[i].getyLoc();
+                        //s1.window.getX();
                         if (s1.getPlanet()[i].getxLoc() < s1.window.getX() && s1.getPlanet()[i].getxSpeed() < 0) {
                             s1.getPlanet()[i].setxSpeed(s1.getPlanet()[i].getxSpeed() * -1);
                         }
@@ -76,23 +75,28 @@ public class AstroidsWindow extends Frame{
                         }
                     }
                     for (i = 0; i < numShips; i++) {
-                        s1.getShip()[i].getxLoc();
-                        s1.getShip()[i].getyLoc();
-                        s1.window.getX();
+                        //s1.getShip()[i].getxLoc();
+                        //s1.getShip()[i].getyLoc();
+                        //s1.window.getX();
                         if (s1.getShip()[i].getxLoc() - s1.getShip()[i].getSize() < s1.window.getX() && s1.getShip()[i].getxSpeed() < 0) {
                             s1.getShip()[i].setxSpeed(s1.getShip()[i].getxSpeed() * -1);
+                            //s1.getShip()[i].bounce(0);
                         }
                         if (s1.getShip()[i].getyLoc() - s1.getShip()[i].getSize() < s1.window.getY() && s1.getShip()[i].getySpeed() < 0) {
                             s1.getShip()[i].setySpeed(s1.getShip()[i].getySpeed() * -1);
+                            //s1.getShip()[i].bounce(Math.PI/2);
                         }
                         if (s1.getShip()[i].getxLoc() + s1.getShip()[i].getSize() >= s1.window.getX() + s1.window.getWindowWidth() && s1.getShip()[i].getxSpeed() > 0) {
                             s1.getShip()[i].setxSpeed(s1.getShip()[i].getxSpeed() * -1);
+                            //s1.getShip()[i].bounce(Math.PI);
                         }
                         if (s1.getShip()[i].getyLoc() + s1.getShip()[i].getSize() >= s1.window.getY() + s1.window.getWindowHeight() && s1.getShip()[i].getySpeed() > 0) {
                             s1.getShip()[i].setySpeed(s1.getShip()[i].getySpeed() * -1);
+                            //s1.getShip()[i].bounce(3*Math.PI/2);
                         }
                     }
                 }
+                s1.simStep();
                 //repaint();//moved to slower timer
             }
         };

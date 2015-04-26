@@ -121,27 +121,22 @@ public class PhysicsSpace {
         updateState();
     }
     
-    private void updateState(){
-        for(i=0; i<numShips; i++){
-            ship[i].move();
-        }
-        for(i=0; i<numPlanets; i++){
-            planet[i].move();
-        }
-    }
-    
-    private void applyForces(){
-        for(i=0; i<numShips; i++){
-            for(j=i+1; j<numShips; j++){// ship-ship interactions
-                // force from ship[j] acting on ship[i]:
-                g = G * /*AstroidsWindow.forwards*-1.0**/ship[j].getMass()/((ship[j].getxLoc()-ship[i].getxLoc())*(ship[j].getxLoc()-ship[i].getxLoc())+(ship[j].getyLoc()-ship[i].getyLoc())*(ship[j].getyLoc()-ship[i].getyLoc()));
-                gAngle = org.apache.commons.math.util.FastMath.atan2(ship[j].getyLoc()-ship[i].getyLoc(), ship[j].getxLoc()-ship[i].getxLoc());
-                ship[i].setxAcceleration(ship[i].getxAcceleration() + g * org.apache.commons.math.util.FastMath.cos(gAngle));
-                ship[i].setyAcceleration(ship[i].getyAcceleration() + g * org.apache.commons.math.util.FastMath.sin(gAngle));
-                // force from ship[i] acting on ship[j]:
-                g = /*AstroidsWindow.forwards**/-1.0 * g / ship[j].getMass() * ship[i].getMass();
-                ship[j].setxAcceleration(ship[j].getxAcceleration() + g * org.apache.commons.math.util.FastMath.cos(gAngle));
-                ship[j].setyAcceleration(ship[j].getyAcceleration() + g * org.apache.commons.math.util.FastMath.sin(gAngle));
+    private void updateState() {
+        for (i = 0; i < numShips; i++) {
+            //ship[i].move();
+            if (AstroidsWindow.forwards) {
+                ship[i].setFuel(ship[i].getFuel() - ship[i].getThrust());
+
+                ship[i].setxAcceleration(ship[i].getxAcceleration() + ship[i].getThrust() * org.apache.commons.math.util.FastMath.cos(ship[i].getThrustAngle()));
+                ship[i].setyAcceleration(ship[i].getyAcceleration() + ship[i].getThrust() * org.apache.commons.math.util.FastMath.sin(ship[i].getThrustAngle()));
+
+                ship[i].setxSpeed(ship[i].getxSpeed() + ship[i].getxAcceleration());
+                ship[i].setySpeed(ship[i].getySpeed() + ship[i].getyAcceleration());
+
+                ship[i].setxLoc(ship[i].getxLoc() + /*AstroidsWindow.timerDelay * */ AstroidsWindow.speedFactor * ship[i].getxSpeed());
+                ship[i].setyLoc(ship[i].getyLoc() + /*AstroidsWindow.timerDelay * */ AstroidsWindow.speedFactor * ship[i].getySpeed());
+                
+                /*
                 if(org.apache.commons.math.util.FastMath.sqrt((ship[i].getxLoc() - ship[j].getxLoc()) * (ship[i].getxLoc() - ship[j].getxLoc()) + (ship[i].getyLoc() - ship[j].getyLoc()) * (ship[i].getyLoc() - ship[j].getyLoc())) < ship[i].getSize() + ship[j].getSize()){
                     //i.e. If the distance between the 2 ships is less than the sum of their radii
                     //Then there is a collision
@@ -152,19 +147,88 @@ public class PhysicsSpace {
                     //Do nothing to the component of velocity in the perpendicular direction
                     //Reverse (-1*) the component of velocity in the gAngle direction
                     //Apply to the horizontal-vertical basis
+                    ship[i].bounce(gAngle - Math.PI/2);
+                    ship[j].bounce(gAngle + Math.PI/2);
+                    
+                    ship[i].setxLoc(ship[i].getxLoc() + /*AstroidsWindow.timerDelay *  AstroidsWindow.speedFactor * ship[i].getxSpeed());
+                    ship[i].setyLoc(ship[i].getyLoc() + /*AstroidsWindow.timerDelay *  AstroidsWindow.speedFactor * ship[i].getySpeed());
                 }
+                */
+                
+            } else {
+                ship[i].setFuel(ship[i].getFuel() + ship[i].getThrust());
+
+                ship[i].setxAcceleration(ship[i].getxAcceleration() - ship[i].getThrust() * org.apache.commons.math.util.FastMath.cos(ship[i].getThrustAngle()));
+                ship[i].setyAcceleration(ship[i].getyAcceleration() - ship[i].getThrust() * org.apache.commons.math.util.FastMath.sin(ship[i].getThrustAngle()));
+
+                ship[i].setxSpeed(ship[i].getxSpeed() - ship[i].getxAcceleration());
+                ship[i].setySpeed(ship[i].getySpeed() - ship[i].getyAcceleration());
+
+                ship[i].setxLoc(ship[i].getxLoc() - /*AstroidsWindow.timerDelay * */ AstroidsWindow.speedFactor * ship[i].getxSpeed());
+                ship[i].setyLoc(ship[i].getyLoc() - /*AstroidsWindow.timerDelay * */ AstroidsWindow.speedFactor * ship[i].getySpeed());
+                
+            }
+
+/*            fuelColor = fuel * 255 / 10;
+            if (fuelColor > 255) {
+                fuelColor = 255;
+            } else if (fuelColor < 0) {
+                fuelColor = 0;
+            }*/
+        //color = new Color(255 - (int)fuelColor,(int)fuelColor,0);
+
+        //xAcceleration += thrust * org.apache.commons.math.util.FastMath.cos(thrustAngle);
+            //yAcceleration += thrust * org.apache.commons.math.util.FastMath.sin(thrustAngle);
+            //xSpeed += AstroidsWindow.forwards*xAcceleration;
+            //ySpeed += AstroidsWindow.forwards*yAcceleration;
+            ship[i].setxAcceleration(0);// g reaccumualted in PhysiscsSpace.applyForces()
+            ship[i].setyAcceleration(0);
+        }
+        for (i = 0; i < numPlanets; i++) {
+            planet[i].move();
+        }
+    }
+    
+    private void applyForces(){
+        for(i=0; i<numShips; i++){
+            for(j=i+1; j<numShips; j++){// ship-ship interactions
+                if(org.apache.commons.math.util.FastMath.sqrt((ship[i].getxLoc() - ship[j].getxLoc()) * (ship[i].getxLoc() - ship[j].getxLoc()) + (ship[i].getyLoc() - ship[j].getyLoc()) * (ship[i].getyLoc() - ship[j].getyLoc())) < ship[i].getSize() + ship[j].getSize()){
+                    //i.e. If the distance between the 2 ships is less than the sum of their radii
+                    //Then there is a collision
+                    //elastically bounce
+                    //
+                    //gAngle is the angle of the line between the 2 ships.
+                    //Write the velocities of the ships in the basis of gAngle and the perpendicular angle.
+                    //Do nothing to the component of velocity in the perpendicular direction
+                    //Reverse (-1*) the component of velocity in the gAngle direction
+                    //Apply to the horizontal-vertical basis
+                    ship[i].bounce(gAngle - Math.PI/2);
+                    ship[j].bounce(gAngle + Math.PI/2);
+                }
+                // force from ship[j] acting on ship[i]:
+                g = G * /*AstroidsWindow.forwards*-1.0**/ship[j].getMass()/((ship[j].getxLoc()-ship[i].getxLoc())*(ship[j].getxLoc()-ship[i].getxLoc())+(ship[j].getyLoc()-ship[i].getyLoc())*(ship[j].getyLoc()-ship[i].getyLoc()));
+                gAngle = org.apache.commons.math.util.FastMath.atan2(ship[j].getyLoc()-ship[i].getyLoc(), ship[j].getxLoc()-ship[i].getxLoc());
+                ship[i].setxAcceleration(ship[i].getxAcceleration() + g * org.apache.commons.math.util.FastMath.cos(gAngle));
+                ship[i].setyAcceleration(ship[i].getyAcceleration() + g * org.apache.commons.math.util.FastMath.sin(gAngle));
+                // force from ship[i] acting on ship[j]:
+                g = /*AstroidsWindow.forwards**/-1.0 * g / ship[j].getMass() * ship[i].getMass();
+                ship[j].setxAcceleration(ship[j].getxAcceleration() + g * org.apache.commons.math.util.FastMath.cos(gAngle));
+                ship[j].setyAcceleration(ship[j].getyAcceleration() + g * org.apache.commons.math.util.FastMath.sin(gAngle));
+
             }
             for(j=0; j<numStars; j++){// ship-star interactions
+                if(org.apache.commons.math.util.FastMath.sqrt((ship[i].getxLoc() - star[j].getxLoc()) * (ship[i].getxLoc() - star[j].getxLoc()) + (ship[i].getyLoc() - star[j].getyLoc()) * (ship[i].getyLoc() - star[j].getyLoc())) < ship[i].getSize() + star[j].getSize()){
+                    //i.e. If the distance between the ship and the star is less than the sum of their radii
+                    //Then there is a collision with the ship and the star
+                    ship[i].bounce(gAngle + Math.PI/2);
+                    //game over for Ship[i]
+                    //TODO: make gameOver() method
+                }
                 g = G * /*AstroidsWindow.forwards*-1.0**/star[j].getMass()/((star[j].getxLoc()-ship[i].getxLoc())*(star[j].getxLoc()-ship[i].getxLoc())+(star[j].getyLoc()-ship[i].getyLoc())*(star[j].getyLoc()-ship[i].getyLoc()));
                 gAngle = org.apache.commons.math.util.FastMath.atan2(star[j].getyLoc()-ship[i].getyLoc(), star[j].getxLoc()-ship[i].getxLoc());
                 ship[i].setxAcceleration(ship[i].getxAcceleration() + g * org.apache.commons.math.util.FastMath.cos(gAngle));
                 ship[i].setyAcceleration(ship[i].getyAcceleration() + g * org.apache.commons.math.util.FastMath.sin(gAngle));
-                if(org.apache.commons.math.util.FastMath.sqrt((ship[i].getxLoc() - star[j].getxLoc()) * (ship[i].getxLoc() - star[j].getxLoc()) + (ship[i].getyLoc() - star[j].getyLoc()) * (ship[i].getyLoc() - star[j].getyLoc())) < ship[i].getSize() + star[j].getSize()){
-                    //i.e. If the distance between the ship and the star is less than the sum of their radii
-                    //Then there is a collision with the ship and the star
-                    //game over for Ship[i]
-                    //TODO: make gameOver() method
-                }
+
             }
             for(j=0; j<numPlanets; j++){// ship-planet interactions
                 // force from planet acting on ship:
