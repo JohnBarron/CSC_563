@@ -11,7 +11,7 @@ import java.io.IOException;
  *
  * @author Renu
  */
-public class AsteoridsServerMain {
+public class AsteroidsServerMain {
     /**
      * @param args the command line arguments
      */

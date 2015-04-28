@@ -20,7 +20,7 @@ public class MulticastAsteroidsServerThread extends AsteroidsServerThread {
     }
  
     public void run() {
-        boolean runningThread = true;
+        boolean runningThread = true, send = true, receive = true;
         while (runningThread) {
             try {
                 byte[] buf = new byte[256];
