@@ -25,7 +25,7 @@ public class MulticastAsteroidsClient {
 
         DatagramPacket packet;
     
-        boolean runningThread = true;
+        boolean runningThread = true, send = true, receive = true;
         while (runningThread) {
             try {
                 if(send) {
