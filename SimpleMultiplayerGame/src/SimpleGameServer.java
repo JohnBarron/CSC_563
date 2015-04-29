@@ -9,6 +9,7 @@ import java.util.*;
 public class SimpleGameServer {
     private static final int PORT = 4446;
     private static ArrayList<ClientHandler> clientHandler = new ArrayList<>(3);
+    private static boolean allReady = false;
     
     public static void main(String[] args) throws Exception {
         System.out.println("The simple game server is running.");
@@ -34,17 +35,18 @@ public class SimpleGameServer {
         public ClientHandler(Socket socket, int numPlayers) {
             this.socket = socket;
             playerNum = numPlayers;
-            ready = false;
+            ready = true;
         }
 
         public void run() {
             String input;
+            
             try {
                 in = new BufferedReader(new InputStreamReader(
                         socket.getInputStream()));
                 out = new PrintWriter(socket.getOutputStream(), true);
                 
-                while (true) {
+                while (!allReady) {
                     input = in.readLine();
                     if (input == null) {
                         return;
@@ -56,6 +58,11 @@ public class SimpleGameServer {
                     }
                     for (ClientHandler client : clientHandler) {
                         client.out.println(client.playerNum + " " + client.ready);
+                        allReady = allReady && client.ready;
+                    }
+                    if(allReady){
+                        //start the game
+                        gameLoop();
                     }
                 }
             } catch (IOException e) {
@@ -66,6 +73,9 @@ public class SimpleGameServer {
                 } catch (IOException e) {
                 }
             }
+        }
+        private void gameLoop(){
+            
         }
     }
 }
