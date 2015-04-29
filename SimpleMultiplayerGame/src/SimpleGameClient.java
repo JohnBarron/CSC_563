@@ -19,7 +19,7 @@ import java.awt.event.WindowEvent;
 public class SimpleGameClient extends Frame {
     private BufferedReader in;
     private PrintWriter out;
-    private JFrame frame = new JFrame("Chatter");
+    private JFrame frame = new JFrame("SimpleGameClient");
     private Graphics dbg;
     private Image dbImage;
     private static final int width = 600, height = 600;
@@ -29,22 +29,15 @@ public class SimpleGameClient extends Frame {
     
     private boolean ready = false;
     private String line = "";
-    private String tempPlayerNum;
-    private String tempReady;
+    private String tempPlayerNum = "0";
+    private String tempReady = "false";
     private String[] lineParts;
 
-    /**
-     * Constructs the client by laying out the GUI and registering a listener
-     * with the textfield so that pressing Return in the listener sends the
-     * textfield contents to the server. Note however that the textfield is
-     * initially NOT editable, and only becomes editable AFTER the client
-     * receives the NAMEACCEPTED message from the server.
-     */
     public SimpleGameClient() {
         super("Astroids");
         setSize(600, 600);
         setLocation(0, 0);
-        setUndecorated(true);
+        //setUndecorated(true);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 System.exit(0);
@@ -93,9 +86,6 @@ public class SimpleGameClient extends Frame {
                 JOptionPane.PLAIN_MESSAGE);
     }
 
-    /**
-     * Connects to the server then enters the processing loop.
-     */
     private void run() throws IOException {
 // Make connection and initialize streams
         String serverAddress = getServerAddress();
@@ -103,6 +93,7 @@ public class SimpleGameClient extends Frame {
         in = new BufferedReader(new InputStreamReader(
                 socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
+        frame.setVisible(false);
         
         
 // Process all messages from server, according to the protocol.
@@ -118,19 +109,18 @@ public class SimpleGameClient extends Frame {
         }*/
     }
 
-    /**
-     * Runs the client as an application with a closeable frame.
-     */
     public void paint(Graphics g) {
         super.paint(g);
         g.setColor(Color.BLACK);
-        g.drawString(line, 10, 10);
+        g.drawString(line, 10, 150 + 15 * new Integer(tempPlayerNum));
     }
     public void update(Graphics g) {
         if (dbImage == null) {
             dbImage = createImage(width, height);
             dbg = dbImage.getGraphics();
         }
+        dbg.setColor(Color.WHITE);
+        dbg.fillRect(0, 0, width, height);
         paint(dbg);
         g.drawImage(dbImage, 0, 0, this);
     }

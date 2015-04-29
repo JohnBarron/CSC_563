@@ -70,6 +70,7 @@ public class SimpleGameServer {
             } finally {
                 try {
                     socket.close();
+                    clientHandler.remove(this);
                 } catch (IOException e) {
                 }
             }
