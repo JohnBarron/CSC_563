@@ -35,7 +35,7 @@ public class SimpleGameServer {
         public ClientHandler(Socket socket, int numPlayers) {
             this.socket = socket;
             playerNum = numPlayers;
-            ready = true;
+            ready = false;
         }
 
         public void run() {
@@ -51,16 +51,16 @@ public class SimpleGameServer {
                     if (input == null) {
                         return;
                     }
-                    if(input.equals("R")){
-                        ready = true;
-                    } else {
-                        ready = false;
+                    ready = input.equals("R");
+                    allReady = false;
+                    for (ClientHandler clienti : clientHandler) {
+                        clienti.out.println(clientHandler.size());
+                        for (ClientHandler clientj : clientHandler) {
+                            clienti.out.println(clientj.playerNum + " " + clientj.ready);
+                        }
+                        allReady = allReady && clienti.ready;
                     }
-                    for (ClientHandler client : clientHandler) {
-                        client.out.println(client.playerNum + " " + client.ready);
-                        allReady = allReady && client.ready;
-                    }
-                    if(allReady){
+                    if (allReady) {
                         //start the game
                         gameLoop();
                     }

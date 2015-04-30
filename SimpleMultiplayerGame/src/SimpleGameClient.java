@@ -15,6 +15,7 @@ import javax.swing.JTextField;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 
 public class SimpleGameClient extends Frame {
     private BufferedReader in;
@@ -28,13 +29,15 @@ public class SimpleGameClient extends Frame {
     //private JTextArea messageArea = new JTextArea(8, 40);
     
     private boolean ready = false;
+    private int numPlayers = 0;
+    private ArrayList<String> playerStatus = new ArrayList<>(3);
     private String line = "";
     private String tempPlayerNum = "0";
     private String tempReady = "false";
     private String[] lineParts;
 
     public SimpleGameClient() {
-        super("Astroids");
+        super("Simple Game");
         setSize(600, 600);
         setLocation(0, 0);
         //setUndecorated(true);
@@ -94,8 +97,16 @@ public class SimpleGameClient extends Frame {
                 socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
         frame.setVisible(false);
-        
-        
+        int i = 0;
+        while (true) {
+            line = in.readLine();
+            numPlayers = new Integer(line);
+            playerStatus = new ArrayList<>(numPlayers);
+            for(i = 0; i < numPlayers; i++){
+                playerStatus.add(in.readLine());
+            }
+            repaint();
+        }
 // Process all messages from server, according to the protocol.
   /*      while (true) {
             String line = in.readLine();
@@ -112,7 +123,12 @@ public class SimpleGameClient extends Frame {
     public void paint(Graphics g) {
         super.paint(g);
         g.setColor(Color.BLACK);
-        g.drawString(line, 10, 150 + 15 * new Integer(tempPlayerNum));
+        for(int i = 0; i < playerStatus.size();i++){
+            lineParts = playerStatus.get(i).split(" ");
+            tempPlayerNum = lineParts[0];
+            tempReady = lineParts[1];
+            g.drawString(playerStatus.get(i), 10, 150 + 15 * new Integer(tempPlayerNum));
+        }
     }
     public void update(Graphics g) {
         if (dbImage == null) {
@@ -142,22 +158,17 @@ public class SimpleGameClient extends Frame {
             //      as a player would expect ex. 'w' and 'd' makes angle = PI/4
             c = e.getKeyChar();
             if (c == 'r') {
-                try {
+                //try {
                     ready = !ready;
                     if (ready) {
                         out.println("R");
                     } else {
                         out.println("r");
                     }
-                    line = in.readLine();
-                    lineParts = line.split(" ");
-                    tempPlayerNum = lineParts[0];
-                    tempReady = lineParts[1];
-                    repaint();
-                    //messageArea.append(line);
-                } catch (IOException ex) {
-                    System.out.println(ex);
-                }
+
+                //} catch (IOException ex) {
+                 //   System.out.println(ex);
+                //}
             }
         }
     }
