@@ -15,7 +15,12 @@ import javax.swing.JTextField;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SimpleGameClient extends Frame {
     private BufferedReader in;
@@ -36,6 +41,13 @@ public class SimpleGameClient extends Frame {
     private String tempReady = "false";
     private String[] lineParts;
     private boolean gameStarted = false;
+    private DatagramSocket UDPSoc;
+    private DatagramPacket clientPacket;
+    private byte[] aByte = new byte[] {0x00};
+    private byte[] sByte = new byte[] {0x01};
+    private byte[] wByte = new byte[] {0x02};
+    private byte[] dByte = new byte[] {0x03};
+    
 
     public SimpleGameClient() {
         super("Simple Game");
@@ -94,12 +106,14 @@ public class SimpleGameClient extends Frame {
 // Make connection and initialize streams
         String serverAddress = getServerAddress();
         Socket socket = new Socket(serverAddress, 4446);
+        
         in = new BufferedReader(new InputStreamReader(
                 socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
         frame.setVisible(false);
         int i = 0;
         int numberOfPlayersReady = 0;
+        UDPSoc = new DatagramSocket(4446, socket.getInetAddress());
         while (true) {
             line = in.readLine();
             numPlayers = new Integer(line);
@@ -174,18 +188,42 @@ public class SimpleGameClient extends Frame {
             //TODO: optionally make it work with multiple keys pressed
             //      as a player would expect ex. 'w' and 'd' makes angle = PI/4
             c = e.getKeyChar();
-            if (c == 'r') {
-                //try {
-                    ready = !ready;
-                    if (ready) {
-                        out.println("R");
-                    } else {
-                        out.println("r");
-                    }
+            if(!gameStarted) {
+                if (c == 'r') {
+                    //try {
+                        ready = !ready;
+                        if (ready) {
+                            out.println("R");
+                        } else {
+                            out.println("r");
+                        }
 
-                //} catch (IOException ex) {
-                 //   System.out.println(ex);
-                //}
+                    //} catch (IOException ex) {
+                     //   System.out.println(ex);
+                    //}
+                }
+            }
+            else {
+                    try {
+                        if (c == 'a') {
+                            clientPacket = new DatagramPacket(aByte, aByte.length, UDPSoc.getInetAddress(), UDPSoc.getPort());
+                            UDPSoc.send(clientPacket);
+                        }
+                        else if (c == 's') {
+                            clientPacket = new DatagramPacket(sByte, sByte.length, UDPSoc.getInetAddress(), UDPSoc.getPort());
+                            UDPSoc.send(clientPacket);
+                        }
+                        else if (c == 'w') {
+                            clientPacket = new DatagramPacket(wByte, wByte.length, UDPSoc.getInetAddress(), UDPSoc.getPort());
+                            UDPSoc.send(clientPacket);
+                        }
+                        else if (c == 'd') {
+                            clientPacket = new DatagramPacket(dByte, dByte.length, UDPSoc.getInetAddress(), UDPSoc.getPort());
+                            UDPSoc.send(clientPacket);
+                        }
+                    } catch (IOException ex) {
+                        Logger.getLogger(SimpleGameClient.class.getName()).log(Level.SEVERE, null, ex);
+                    }
             }
         }
     }
