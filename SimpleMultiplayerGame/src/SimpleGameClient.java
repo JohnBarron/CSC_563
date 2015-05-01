@@ -35,6 +35,7 @@ public class SimpleGameClient extends Frame {
     private String tempPlayerNum = "0";
     private String tempReady = "false";
     private String[] lineParts;
+    private boolean gameStarted = false;
 
     public SimpleGameClient() {
         super("Simple Game");
@@ -98,12 +99,23 @@ public class SimpleGameClient extends Frame {
         out = new PrintWriter(socket.getOutputStream(), true);
         frame.setVisible(false);
         int i = 0;
+        int numberOfPlayersReady = 0;
         while (true) {
             line = in.readLine();
             numPlayers = new Integer(line);
             playerStatus = new ArrayList<>(numPlayers);
             for(i = 0; i < numPlayers; i++){
                 playerStatus.add(in.readLine());
+                lineParts = playerStatus.get(i).split(" ");
+                tempPlayerNum = lineParts[0];
+                tempReady = lineParts[1];
+                if(tempReady.equalsIgnoreCase("true")) {
+                    numberOfPlayersReady++;
+                }
+            }
+            
+            if(numPlayers > 1 && numberOfPlayersReady == numPlayers) {
+                gameStarted = true;
             }
             repaint();
         }
@@ -123,11 +135,16 @@ public class SimpleGameClient extends Frame {
     public void paint(Graphics g) {
         super.paint(g);
         g.setColor(Color.BLACK);
-        for(int i = 0; i < playerStatus.size();i++){
-            lineParts = playerStatus.get(i).split(" ");
-            tempPlayerNum = lineParts[0];
-            tempReady = lineParts[1];
-            g.drawString(playerStatus.get(i), 10, 150 + 15 * new Integer(tempPlayerNum));
+        if (gameStarted) {
+            for(int i = 0; i < playerStatus.size();i++){
+                lineParts = playerStatus.get(i).split(" ");
+                tempPlayerNum = lineParts[0];
+                tempReady = lineParts[1];
+                g.drawString(playerStatus.get(i), 10, 150 + 15 * new Integer(tempPlayerNum));
+            }
+        }
+        else {
+            
         }
     }
     public void update(Graphics g) {
