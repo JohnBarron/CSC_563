@@ -42,11 +42,13 @@ public class SimpleGameClient extends Frame {
     private String[] lineParts;
     private boolean gameStarted = false;
     private DatagramSocket UDPSoc;
-    private DatagramPacket clientPacket;
-    private byte[] aByte = new byte[] {0x00};
-    private byte[] sByte = new byte[] {0x01};
-    private byte[] wByte = new byte[] {0x02};
-    private byte[] dByte = new byte[] {0x03};
+    private DatagramPacket clientPacket, serverPacket;
+    private InetAddress serverIP;
+    private final byte[] aByte = new byte[] {0x00};
+    private final byte[] sByte = new byte[] {0x01};
+    private final byte[] wByte = new byte[] {0x02};
+    private final byte[] dByte = new byte[] {0x03};
+    private byte[] inByte = new byte[1];
     
 
     public SimpleGameClient() {
@@ -78,7 +80,7 @@ public class SimpleGameClient extends Frame {
         //        textField.setText("");
         //    }
         //});
-        
+        serverPacket = new DatagramPacket(inByte, inByte.length);
     }
 
     /**
@@ -106,6 +108,7 @@ public class SimpleGameClient extends Frame {
 // Make connection and initialize streams
         String serverAddress = getServerAddress();
         Socket socket = new Socket(serverAddress, 4446);
+        serverIP = socket.getInetAddress();
         
         in = new BufferedReader(new InputStreamReader(
                 socket.getInputStream()));
@@ -113,9 +116,11 @@ public class SimpleGameClient extends Frame {
         frame.setVisible(false);
         int i = 0;
         int numberOfPlayersReady = 0;
-        UDPSoc = new DatagramSocket(4446, socket.getInetAddress());
-        while (true) {
+        while (!gameStarted) {
             line = in.readLine();
+            if(line == null){
+                break;
+            }
             numPlayers = new Integer(line);
             playerStatus = new ArrayList<>(numPlayers);
             for(i = 0; i < numPlayers; i++){
@@ -131,6 +136,14 @@ public class SimpleGameClient extends Frame {
             if(numPlayers > 1 && numberOfPlayersReady == numPlayers) {
                 gameStarted = true;
             }
+            repaint();
+        }
+        in.close();
+        out.close();
+        socket.close();
+        UDPSoc = new DatagramSocket(4446, serverIP);
+        while(gameStarted){
+            UDPSoc.receive(serverPacket);
             repaint();
         }
 // Process all messages from server, according to the protocol.
@@ -149,7 +162,7 @@ public class SimpleGameClient extends Frame {
     public void paint(Graphics g) {
         super.paint(g);
         g.setColor(Color.BLACK);
-        if (gameStarted) {
+        if (!gameStarted) {
             for(int i = 0; i < playerStatus.size();i++){
                 lineParts = playerStatus.get(i).split(" ");
                 tempPlayerNum = lineParts[0];
@@ -158,7 +171,7 @@ public class SimpleGameClient extends Frame {
             }
         }
         else {
-            
+            g.drawString(new Byte(serverPacket.getData()[0]).toString(), width/2, width/2);
         }
     }
     public void update(Graphics g) {
