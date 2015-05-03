@@ -232,6 +232,8 @@ public class AstroidsWindow extends Frame{
                     g.drawString(parts[1], HUDx + 10, HUDy + 100);
                     break;
                 case "1":
+                    //game time
+                    g.drawString(parts[1], HUDx + 300, HUDy + 10);
                     break;
                 case "4":
                     for(int i = 1; i < parts.length; i++) {
