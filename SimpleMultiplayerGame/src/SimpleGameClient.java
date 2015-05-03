@@ -37,7 +37,7 @@ public class SimpleGameClient extends Frame {
     
     private boolean ready = false;
     private int numPlayers = 0;
-    private ArrayList<String> playerStatus = new ArrayList<>(3);
+    private ArrayList<String> playerStatus = new ArrayList<>(6);
     private String line = "";
     private String tempPlayerNum = "0";
     private String tempReady = "false";
@@ -122,6 +122,10 @@ public class SimpleGameClient extends Frame {
         while (!gameStarted) {
             line = in.readLine();
             if(line == null){
+                break;
+            }
+            if(line.equals("StartGame")){
+                gameStarted = true;
                 break;
             }
             numPlayers = new Integer(line);

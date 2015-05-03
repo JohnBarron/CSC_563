@@ -19,12 +19,12 @@ public class SimpleGameServer {
     //private static DatagramSocket UDPsoc;
     private static final int PORT = 4446;
     //private static final int UDPport = 4447;
-    private static ArrayList<ClientHandler> clientHandler = new ArrayList<>(3);
+    private static ArrayList<ClientHandler> clientHandler = new ArrayList<>(6);
     private static boolean allReady = false;
     
     private static javax.swing.Timer timer , secTimer;
     private static int timerDelay = 16, secTimerDelay = 1000;
-    private static int elapsedSeconds = 0;
+    private static volatile int elapsedSeconds = 0;
     
     //private static DatagramPacket datagramOut;
     private static byte[] outByte = new byte[1], inByte = new byte[1];
@@ -110,10 +110,13 @@ public class SimpleGameServer {
                         }
                         allReady = allReady && clienti.ready;
                     }
-                    //if (allReady) {
-                    //    //start the game
-                    //    timer.start();
-                    //}
+                    if (allReady) {
+                        for (ClientHandler clienti : clientHandler) {
+                            clienti.out.println("StartGame");
+                        }
+                        //start the game
+                        //timer.start();
+                    }
                 }
                 //in.close();
                 //out.close();
@@ -129,7 +132,8 @@ public class SimpleGameServer {
                 while(allReady){
                     //UDPsoc.receive(datagramIn);
                     //in.readLine();//ignore input for now
-                    inStream.read();
+                    System.out.println(this.playerNum + " is in the game loop.");
+                    System.out.println(inStream.read());
                     elapsedSeconds += 10;
                 }
             } catch (IOException e) {
