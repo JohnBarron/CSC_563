@@ -1,0 +1,2 @@
+"numberofships"=10
+"numberofcoins"=100
