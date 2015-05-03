@@ -4,21 +4,20 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
+//import java.net.DatagramPacket;
+//import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.Timer;
 
 public class SimpleGameServer {
     private static ServerSocket ss;
-    private static DatagramSocket UDPsoc;
+    //private static DatagramSocket UDPsoc;
     private static final int PORT = 4446;
-    private static final int UDPport = 4447;
+    //private static final int UDPport = 4447;
     private static ArrayList<ClientHandler> clientHandler = new ArrayList<>(3);
     private static boolean allReady = false;
     
@@ -26,7 +25,7 @@ public class SimpleGameServer {
     private static int timerDelay = 16, secTimerDelay = 1000;
     private static int elapsedSeconds = 0;
     
-    private static DatagramPacket datagramOut;
+    //private static DatagramPacket datagramOut;
     private static byte[] outByte = new byte[1], inByte = new byte[1];
     
     
@@ -41,12 +40,7 @@ public class SimpleGameServer {
                 //put 60 - elapsedSeconds as a byte in the datagram
                 outByte[0] = new Integer(60 - elapsedSeconds).byteValue();
                 for(ClientHandler clienti : clientHandler){
-                    datagramOut = new DatagramPacket(outByte, outByte.length, /*clienti.*/UDPsoc.getInetAddress(), UDPport);
-                    try {
-                        /*clienti.*/UDPsoc.send(datagramOut);
-                    } catch (IOException ex) {
-                        System.out.println(ex);
-                    }
+                    clienti.out.println(60 - elapsedSeconds);
                 }
             }
         };
@@ -54,12 +48,14 @@ public class SimpleGameServer {
     public static void main(String[] args) throws Exception {
         System.out.println("The simple game server is running.");
         ss = new ServerSocket(PORT);
-        UDPsoc = new DatagramSocket(UDPport);
+        //ss.setPerformancePreferences(0, 10, 1);//needs socket with no-arg constructor
+        //UDPsoc = new DatagramSocket(UDPport);
+        //ss
         try {
             while (true) {
                 clientHandler.add(new ClientHandler(ss.accept(), clientHandler.size()));
                 clientHandler.get(clientHandler.size()-1).start();
-                UDPsoc.bind(clientHandler.get(clientHandler.size()-1).socket.getRemoteSocketAddress());
+                //UDPsoc.bind(clientHandler.get(clientHandler.size()-1).socket.getRemoteSocketAddress());
             }
         } finally {
             ss.close();
@@ -71,17 +67,18 @@ public class SimpleGameServer {
         private int playerNum;
         private Socket socket;
         //private DatagramSocket UDPsoc;
-        private DatagramPacket datagramIn;
+        //private DatagramPacket datagramIn;
         private InetAddress clientIP;
         private BufferedReader in;
         private PrintWriter out;
         private boolean ready;
 
-        public ClientHandler(Socket socket, int numPlayers) {
+        public ClientHandler(Socket socket, int numPlayers) throws SocketException {
             this.socket = socket;
+            this.socket.setTcpNoDelay(true);
             playerNum = numPlayers;
             ready = false;
-            datagramIn = new DatagramPacket(inByte, inByte.length);
+            //datagramIn = new DatagramPacket(inByte, inByte.length);
         }
 
         public void run() {
@@ -115,9 +112,9 @@ public class SimpleGameServer {
                     //    timer.start();
                     //}
                 }
-                in.close();
-                out.close();
-                socket.close();
+                //in.close();
+                //out.close();
+                //socket.close();
                 //UDPsoc = new DatagramSocket(UDPport, clientIP);
                 //game has started
                 if(!timer.isRunning()){
@@ -127,7 +124,8 @@ public class SimpleGameServer {
                     secTimer.start();
                 }
                 while(allReady){
-                    UDPsoc.receive(datagramIn);
+                    //UDPsoc.receive(datagramIn);
+                    in.readLine();//ignore input for now
                 }
             } catch (IOException e) {
                 System.out.println(e);

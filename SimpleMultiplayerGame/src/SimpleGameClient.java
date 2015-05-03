@@ -15,16 +15,14 @@ import javax.swing.JTextField;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
+//import java.net.DatagramPacket;
+//import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class SimpleGameClient extends Frame {
     private static final int PORT = 4446;
-    private static final int UDPport = 4447;
+    //private static final int UDPport = 4447;
     private BufferedReader in;
     private PrintWriter out;
     private JFrame frame = new JFrame("SimpleGameClient");
@@ -43,8 +41,8 @@ public class SimpleGameClient extends Frame {
     private String tempReady = "false";
     private String[] lineParts;
     private boolean gameStarted = false;
-    private DatagramSocket UDPSoc;
-    private DatagramPacket clientPacket, serverPacket;
+    //private DatagramSocket UDPSoc;
+    //private DatagramPacket clientPacket, serverPacket;
     private InetAddress serverIP;
     private final byte[] aByte = new byte[] {0x00};
     private final byte[] sByte = new byte[] {0x01};
@@ -82,7 +80,7 @@ public class SimpleGameClient extends Frame {
         //        textField.setText("");
         //    }
         //});
-        serverPacket = new DatagramPacket(inByte, inByte.length);
+        //serverPacket = new DatagramPacket(inByte, inByte.length);
     }
 
     /**
@@ -135,17 +133,18 @@ public class SimpleGameClient extends Frame {
                 }
             }
             
-            if(numPlayers > 1 && numberOfPlayersReady == numPlayers) {
+            if(/*numPlayers > 1 &&*/ numberOfPlayersReady == numPlayers) {
                 gameStarted = true;
             }
             repaint();
         }
-        in.close();
-        out.close();
-        socket.close();
-        UDPSoc = new DatagramSocket(UDPport, serverIP);
+        //in.close();
+        //out.close();
+        //socket.close();
+        //UDPSoc = new DatagramSocket(UDPport, serverIP);
         while(gameStarted){
-            UDPSoc.receive(serverPacket);
+            //UDPSoc.receive(serverPacket);
+            line = in.readLine();
             repaint();
         }
 // Process all messages from server, according to the protocol.
@@ -173,7 +172,8 @@ public class SimpleGameClient extends Frame {
             }
         }
         else {
-            g.drawString(new Byte(serverPacket.getData()[0]).toString(), width/2, width/2);
+            //g.drawString(new Byte(serverPacket.getData()[0]).toString(), width/2, width/2);
+            g.drawString(line, width/2, width/2);
         }
     }
     public void update(Graphics g) {
@@ -218,7 +218,7 @@ public class SimpleGameClient extends Frame {
                     //}
                 }
             }
-            else {
+            /*else {
                     try {
                         if (c == 'a') {
                             clientPacket = new DatagramPacket(aByte, aByte.length, UDPSoc.getInetAddress(), UDPport);
@@ -237,9 +237,9 @@ public class SimpleGameClient extends Frame {
                             UDPSoc.send(clientPacket);
                         }
                     } catch (IOException ex) {
-                        Logger.getLogger(SimpleGameClient.class.getName()).log(Level.SEVERE, null, ex);
+                        System.out.println(ex);
                     }
-            }
+            }*/
         }
     }
 }
