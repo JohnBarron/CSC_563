@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.InputStream;
 //import java.net.DatagramPacket;
 //import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -40,8 +41,9 @@ public class SimpleGameServer {
                 //put 60 - elapsedSeconds as a byte in the datagram
                 outByte[0] = new Integer(60 - elapsedSeconds).byteValue();
                 for(ClientHandler clienti : clientHandler){
-                    clienti.out.println(60 - elapsedSeconds);
+                    clienti.out.println(new Integer(60 - elapsedSeconds).toString());
                 }
+                elapsedSeconds++;
             }
         };
     
@@ -69,6 +71,7 @@ public class SimpleGameServer {
         //private DatagramSocket UDPsoc;
         //private DatagramPacket datagramIn;
         private InetAddress clientIP;
+        private InputStream inStream;
         private BufferedReader in;
         private PrintWriter out;
         private boolean ready;
@@ -85,8 +88,8 @@ public class SimpleGameServer {
             String input;
             
             try {
-                in = new BufferedReader(new InputStreamReader(
-                        socket.getInputStream()));
+                inStream = socket.getInputStream();
+                in = new BufferedReader(new InputStreamReader(inStream));
                 out = new PrintWriter(socket.getOutputStream(), true);
                 clientIP = socket.getInetAddress();
                 
@@ -125,7 +128,9 @@ public class SimpleGameServer {
                 }
                 while(allReady){
                     //UDPsoc.receive(datagramIn);
-                    in.readLine();//ignore input for now
+                    //in.readLine();//ignore input for now
+                    inStream.read();
+                    elapsedSeconds += 10;
                 }
             } catch (IOException e) {
                 System.out.println(e);

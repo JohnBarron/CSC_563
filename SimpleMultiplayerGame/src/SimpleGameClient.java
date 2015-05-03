@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.OutputStream;
 import java.net.Socket;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -25,6 +26,7 @@ public class SimpleGameClient extends Frame {
     //private static final int UDPport = 4447;
     private BufferedReader in;
     private PrintWriter out;
+    private OutputStream outStream;
     private JFrame frame = new JFrame("SimpleGameClient");
     private Graphics dbg;
     private Image dbImage;
@@ -112,7 +114,8 @@ public class SimpleGameClient extends Frame {
         
         in = new BufferedReader(new InputStreamReader(
                 socket.getInputStream()));
-        out = new PrintWriter(socket.getOutputStream(), true);
+        outStream = socket.getOutputStream();
+        out = new PrintWriter(outStream, true);
         frame.setVisible(false);
         int i = 0;
         int numberOfPlayersReady = 0;
@@ -123,9 +126,13 @@ public class SimpleGameClient extends Frame {
             }
             numPlayers = new Integer(line);
             playerStatus = new ArrayList<>(numPlayers);
+            numberOfPlayersReady = 0;
             for(i = 0; i < numPlayers; i++){
                 playerStatus.add(in.readLine());
                 lineParts = playerStatus.get(i).split(" ");
+                if(lineParts.length < 2){
+                    break;
+                }
                 tempPlayerNum = lineParts[0];
                 tempReady = lineParts[1];
                 if(tempReady.equalsIgnoreCase("true")) {
@@ -218,28 +225,32 @@ public class SimpleGameClient extends Frame {
                     //}
                 }
             }
-            /*else {
+            else {
                     try {
                         if (c == 'a') {
-                            clientPacket = new DatagramPacket(aByte, aByte.length, UDPSoc.getInetAddress(), UDPport);
-                            UDPSoc.send(clientPacket);
+                            outStream.write(aByte);
+                            //clientPacket = new DatagramPacket(aByte, aByte.length, UDPSoc.getInetAddress(), UDPport);
+                            //UDPSoc.send(clientPacket);
                         }
                         else if (c == 's') {
-                            clientPacket = new DatagramPacket(sByte, sByte.length, UDPSoc.getInetAddress(), UDPport);
-                            UDPSoc.send(clientPacket);
+                            outStream.write(sByte);
+                            //clientPacket = new DatagramPacket(sByte, sByte.length, UDPSoc.getInetAddress(), UDPport);
+                            //UDPSoc.send(clientPacket);
                         }
                         else if (c == 'w') {
-                            clientPacket = new DatagramPacket(wByte, wByte.length, UDPSoc.getInetAddress(), UDPport);
-                            UDPSoc.send(clientPacket);
+                            outStream.write(wByte);
+                            //clientPacket = new DatagramPacket(wByte, wByte.length, UDPSoc.getInetAddress(), UDPport);
+                            //UDPSoc.send(clientPacket);
                         }
                         else if (c == 'd') {
-                            clientPacket = new DatagramPacket(dByte, dByte.length, UDPSoc.getInetAddress(), UDPport);
-                            UDPSoc.send(clientPacket);
+                            outStream.write(dByte);
+                            //clientPacket = new DatagramPacket(dByte, dByte.length, UDPSoc.getInetAddress(), UDPport);
+                            //UDPSoc.send(clientPacket);
                         }
                     } catch (IOException ex) {
                         System.out.println(ex);
                     }
-            }*/
+            }
         }
     }
 }
