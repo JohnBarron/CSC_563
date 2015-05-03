@@ -23,6 +23,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class SimpleGameClient extends Frame {
+    private static final int PORT = 4446;
+    private static final int UDPport = 4447;
     private BufferedReader in;
     private PrintWriter out;
     private JFrame frame = new JFrame("SimpleGameClient");
@@ -107,7 +109,7 @@ public class SimpleGameClient extends Frame {
     private void run() throws IOException {
 // Make connection and initialize streams
         String serverAddress = getServerAddress();
-        Socket socket = new Socket(serverAddress, 4446);
+        Socket socket = new Socket(serverAddress, PORT);
         serverIP = socket.getInetAddress();
         
         in = new BufferedReader(new InputStreamReader(
@@ -141,7 +143,7 @@ public class SimpleGameClient extends Frame {
         in.close();
         out.close();
         socket.close();
-        UDPSoc = new DatagramSocket(4446, serverIP);
+        UDPSoc = new DatagramSocket(UDPport, serverIP);
         while(gameStarted){
             UDPSoc.receive(serverPacket);
             repaint();
@@ -219,19 +221,19 @@ public class SimpleGameClient extends Frame {
             else {
                     try {
                         if (c == 'a') {
-                            clientPacket = new DatagramPacket(aByte, aByte.length, UDPSoc.getInetAddress(), UDPSoc.getPort());
+                            clientPacket = new DatagramPacket(aByte, aByte.length, UDPSoc.getInetAddress(), UDPport);
                             UDPSoc.send(clientPacket);
                         }
                         else if (c == 's') {
-                            clientPacket = new DatagramPacket(sByte, sByte.length, UDPSoc.getInetAddress(), UDPSoc.getPort());
+                            clientPacket = new DatagramPacket(sByte, sByte.length, UDPSoc.getInetAddress(), UDPport);
                             UDPSoc.send(clientPacket);
                         }
                         else if (c == 'w') {
-                            clientPacket = new DatagramPacket(wByte, wByte.length, UDPSoc.getInetAddress(), UDPSoc.getPort());
+                            clientPacket = new DatagramPacket(wByte, wByte.length, UDPSoc.getInetAddress(), UDPport);
                             UDPSoc.send(clientPacket);
                         }
                         else if (c == 'd') {
-                            clientPacket = new DatagramPacket(dByte, dByte.length, UDPSoc.getInetAddress(), UDPSoc.getPort());
+                            clientPacket = new DatagramPacket(dByte, dByte.length, UDPSoc.getInetAddress(), UDPport);
                             UDPSoc.send(clientPacket);
                         }
                     } catch (IOException ex) {
