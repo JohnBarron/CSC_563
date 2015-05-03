@@ -1,16 +1,13 @@
 package com.csc563;
 
-import java.io.*;
 import java.net.*;
-import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.Map.Entry;
 
 public class SocketServer {
     public final static int DEFAULT_PORT = 4446;
     public int port;
     public Socket s;
-    public ArrayList ConnectedClients = new ArrayList<Client>();
+    public ArrayList ConnectedClients = new ArrayList<>();
 	
     public SocketServer(){
         this(DEFAULT_PORT);
