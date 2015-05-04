@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
 public class SimpleGameClient extends Frame {
     private static final int PORT = 4446;
+    private static final String defaultServerIP = "localhost";
     //private static final int UDPport = 4447;
     private BufferedReader in;
     private PrintWriter out;
@@ -92,7 +93,7 @@ public class SimpleGameClient extends Frame {
         return JOptionPane.showInputDialog(
                 frame,
                 "Enter IP Address of the Server:",
-                JOptionPane.QUESTION_MESSAGE);
+                /*JOptionPane.QUESTION_MESSAGE*/defaultServerIP);
     }
 
     /**
@@ -118,7 +119,7 @@ public class SimpleGameClient extends Frame {
         out = new PrintWriter(outStream, true);
         frame.setVisible(false);
         int i = 0;
-        int numberOfPlayersReady = 0;
+        //int numberOfPlayersReady = 0;
         while (!gameStarted) {
             line = in.readLine();
             if(line == null){
@@ -130,23 +131,23 @@ public class SimpleGameClient extends Frame {
             }
             numPlayers = new Integer(line);
             playerStatus = new ArrayList<>(numPlayers);
-            numberOfPlayersReady = 0;
+            //numberOfPlayersReady = 0;
             for(i = 0; i < numPlayers; i++){
                 playerStatus.add(in.readLine());
-                lineParts = playerStatus.get(i).split(" ");
-                if(lineParts.length < 2){
-                    break;
-                }
-                tempPlayerNum = lineParts[0];
-                tempReady = lineParts[1];
-                if(tempReady.equalsIgnoreCase("true")) {
-                    numberOfPlayersReady++;
-                }
+                //lineParts = playerStatus.get(i).split(" ");
+                //if(lineParts.length < 2){
+                //    break;
+                //}
+                //tempPlayerNum = lineParts[0];
+                //tempReady = lineParts[1];
+                //if(tempReady.equalsIgnoreCase("true")) {
+                //    numberOfPlayersReady++;
+                //}
             }
             
-            if(/*numPlayers > 1 &&*/ numberOfPlayersReady == numPlayers) {
-                gameStarted = true;
-            }
+            //if(/*numPlayers > 1 &&*/ numberOfPlayersReady == numPlayers) {
+            //    gameStarted = true;
+            //}
             repaint();
         }
         //in.close();
@@ -178,7 +179,7 @@ public class SimpleGameClient extends Frame {
             for(int i = 0; i < playerStatus.size();i++){
                 lineParts = playerStatus.get(i).split(" ");
                 tempPlayerNum = lineParts[0];
-                tempReady = lineParts[1];
+                //tempReady = lineParts[1];
                 g.drawString(playerStatus.get(i), 10, 150 + 15 * new Integer(tempPlayerNum));
             }
         }

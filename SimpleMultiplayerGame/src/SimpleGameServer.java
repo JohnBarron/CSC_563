@@ -101,6 +101,10 @@ public class SimpleGameServer {
                     if (input == null) {
                         return;
                     }
+                    if(input.equals("GameStarted")){
+                        allReady = true;
+                        break;
+                    }
                     ready = input.equals("R");
                     allReady = true;
                     for (ClientHandler clienti : clientHandler) {
@@ -113,7 +117,9 @@ public class SimpleGameServer {
                     if (allReady) {
                         for (ClientHandler clienti : clientHandler) {
                             clienti.out.println("StartGame");
+                            //this ClientHandler is starting the game, but all the others are waiting for a line "GameStarted". I guess all the clients should send "GameStarted" except the client bound to this ClientHandler.
                         }
+                        //this.out.println("StartGame");
                         //start the game
                         //timer.start();
                     }
