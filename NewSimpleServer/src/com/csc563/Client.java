@@ -87,6 +87,7 @@ public class Client implements Runnable{
                                 output += "|" + c.playerName;
                             }
                             server.SendOutputToAll(output);
+                            server.createPhysicsSpace();
                         }
                         break;
                     case 3: // Post comment

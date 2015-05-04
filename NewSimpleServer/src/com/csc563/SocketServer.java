@@ -8,6 +8,11 @@ public class SocketServer {
     public int port;
     public Socket s;
     public ArrayList ConnectedClients = new ArrayList<>();
+    public static final int arenaHeight = 1366;
+    public static final int arenaWidth = 768;
+    public static final double speedFactor = 16;
+    
+    private PhysicsSpace s1 = null;
 	
     public SocketServer(){
         this(DEFAULT_PORT);
@@ -72,6 +77,18 @@ public class SocketServer {
         }
 
         return output;
+    }
+    
+    public void createPhysicsSpace() {
+        s1 = new PhysicsSpace(ConnectedClients.size(), 0, 0, 100, arenaWidth, arenaHeight, speedFactor);
+        int i = 0;
+        for(Object cl : this.ConnectedClients){
+            Client c = (Client)cl;
+            String output="5|" + c.playerName + "|" + s1.getShip()[i].colorRandom + "|" +
+                    s1.getShip()[i].getxLoc() + "|" + s1.getShip()[i].getyLoc() + "|0";
+            c.out.println(output);
+            c.out.flush();
+        }
     }
 }
 
