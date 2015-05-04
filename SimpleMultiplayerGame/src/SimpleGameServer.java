@@ -119,6 +119,7 @@ public class SimpleGameServer {
                             clienti.out.println("StartGame");
                             //this ClientHandler is starting the game, but all the others are waiting for a line "GameStarted". I guess all the clients should send "GameStarted" except the client bound to this ClientHandler.
                         }
+                        in.readLine();//throw out extra "GameStarted"
                         //this.out.println("StartGame");
                         //start the game
                         //timer.start();

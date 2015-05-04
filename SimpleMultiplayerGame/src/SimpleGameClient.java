@@ -127,6 +127,7 @@ public class SimpleGameClient extends Frame {
             }
             if(line.equals("StartGame")){
                 gameStarted = true;
+                out.println("GameStarted");
                 break;
             }
             numPlayers = new Integer(line);
