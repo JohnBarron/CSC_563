@@ -1,6 +1,6 @@
 package com.csc563;
 
-import com.csc563.AstroidsWindow;
+import com.csc563.SpaceRaceWindow;
 import java.io.*;
 import java.net.*;
 import java.util.Date;
@@ -14,12 +14,12 @@ public class SocketClient implements Runnable {
     public int port;
     public String serverAddr;
     public Socket socket;
-    public AstroidsWindow ui;
+    public SpaceRaceWindow ui;
     BufferedReader In;
     PrintWriter Out;
     private boolean keepRunning;
 
-    public SocketClient(AstroidsWindow frame) throws IOException {
+    public SocketClient(SpaceRaceWindow frame) throws IOException {
         ui = frame;
         this.serverAddr = ui.serverAddr;
         this.port = ui.port;
@@ -56,6 +56,7 @@ public class SocketClient implements Runnable {
                         ui.paint(ui.getGraphics());
                         break;
                     case "5":
+                        ui.paint(ui.getGraphics());
                         break;
                     case "8":
                         break;

@@ -1,16 +1,16 @@
 package com.csc563;
 
 
-import com.csc563.AstroidsWindow;
+import com.csc563.SpaceRaceWindow;
 import java.io.IOException;
 
 //import java.lang.InterruptedException;
 
-public class AstroidsGame {
+public class SpaceRace {
 
     public static void main(String[] args)/* throws InterruptedException*/ {
         try{
-            AstroidsWindow myWindow = new AstroidsWindow();
+            SpaceRaceWindow myWindow = new SpaceRaceWindow();
             Thread t = new Thread();
             t.setDaemon(true);
             t.sleep(Long.MAX_VALUE);
