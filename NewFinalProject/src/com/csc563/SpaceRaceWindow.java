@@ -272,16 +272,19 @@ public class SpaceRaceWindow extends Frame{
     private void displayPlayerStatus(String playerStatusStr, Graphics g) {
         String[] playerStatus = playerStatusStr.split(",");
         for(int i = 0; i < playerStatus.length; i++) {
-            String[] statusParts = playerStatus[i].split("\\|");
-            g.setColor(new Color(new Integer(statusParts[2])));
-            //g.setColor(Color.WHITE);
-            xPixel = new Integer(statusParts[3]);
-            yPixel = new Integer(statusParts[4]); 
-            tempSize = 20;
-            g.fillOval(xPixel-tempSize, yPixel-tempSize, tempSize*2, tempSize*2);
-            String playerInfo = statusParts[1] + ":" + statusParts[5];
-            //System.out.println(playerInfo);
-            g.drawString(playerInfo, HUDx + 10, HUDy + ((i+1) * 100));
+            System.out.println(playerStatus[i]);
+            if(playerStatus[i] != "") {
+                String[] statusParts = playerStatus[i].split("\\|");
+                g.setColor(new Color(new Integer(statusParts[2])));
+                //g.setColor(Color.WHITE);
+                xPixel = new Integer(statusParts[3]);
+                yPixel = new Integer(statusParts[4]); 
+                tempSize = 20;
+                g.fillOval(xPixel-tempSize, yPixel-tempSize, tempSize*2, tempSize*2);
+                String playerInfo = statusParts[1] + ":" + statusParts[5];
+                //System.out.println(playerInfo);
+                g.drawString(playerInfo, HUDx + 10, HUDy + ((i+1) * 100));
+            }
         }
         
     }

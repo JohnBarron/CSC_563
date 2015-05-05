@@ -40,7 +40,7 @@ public class SocketClient implements Runnable {
                 String[] parts = message.split("\\|");
                 //transID = message.substring(0, 1); //The first character of the message
                 transID = parts[0];
-                System.out.println("Incoming : " + message);
+//                System.out.println("Incoming : " + message);
 
                 switch (transID) {
                     //In the protocol, the cases of messages from the server to the normal client are 1, 4, 5, and 8.
@@ -77,7 +77,7 @@ public class SocketClient implements Runnable {
     public void send(String msg) {
         try {
             Out.println(msg);
-            System.out.println("Outgoing : " + msg);
+//            System.out.println("Outgoing : " + msg);
 
         } catch (Exception ex) {
             System.out.println("Exception SocketClient send()");
