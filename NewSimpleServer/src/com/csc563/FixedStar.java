@@ -1,6 +1,5 @@
 package com.csc563;
 
-import com.csc563.AstroidsWindow;
 import java.awt.Color;
 import java.awt.Graphics;
 
@@ -13,16 +12,17 @@ public class FixedStar {
     private Color color;
     private int size;
     
-    public FixedStar(){
-        xLoc = AstroidsWindow.arenaWidth/2;
-        yLoc = AstroidsWindow.arenaHeight/2;
-        xPixel = AstroidsWindow.arenaWidth/2;
-        yPixel = AstroidsWindow.arenaHeight/2;
+    public FixedStar(int width, int height){
+        xLoc = width/2;
+        yLoc = height/2;
+        xPixel = width/2;
+        yPixel = height/2;
         mass = 2;
         color = Color.WHITE;
         size = 20;
     }
     
+    /*
     public FixedStar(double x, double y, double m){
         xLoc = x;
         yLoc = y;
@@ -32,6 +32,7 @@ public class FixedStar {
         color = Color.WHITE;
         size = 1;
     }
+    */
     
     public double getMass(){
         return mass;

@@ -1,6 +1,5 @@
 package com.csc563;
 
-import com.csc563.AstroidsWindow;
 import java.awt.Color;
 import java.awt.Graphics;
 
@@ -15,6 +14,7 @@ public class Planet {
     private double yAcceleration;
     private double mass;
     private Color color;
+    private double speedFactor;
     
     public Planet(){
         xLoc = 350;
@@ -38,7 +38,7 @@ public class Planet {
         color = new Color(255, 0, 0);
     }
     
-    public Planet(double x, double y, double m, Color c) {
+    public Planet(double x, double y, double m, Color c, double spdFactor) {
         xLoc = x;
         yLoc = y;
         mass = m;
@@ -47,6 +47,7 @@ public class Planet {
         xAcceleration = 0;
         yAcceleration = 0;
         color = c;
+        speedFactor = spdFactor;
     }
     
     public void setxAcceleration(double a){
@@ -96,19 +97,21 @@ public class Planet {
     
     public void move(){
         
-        if(AstroidsWindow.forwards){
+//        if(AstroidsWindow.forwards){
             xSpeed += xAcceleration;
             ySpeed += yAcceleration;
             
-            xLoc += /*AstroidsWindow.timerDelay * */AstroidsWindow.speedFactor * xSpeed;
-            yLoc += /*AstroidsWindow.timerDelay * */AstroidsWindow.speedFactor * ySpeed;
+            xLoc += /*AstroidsWindow.timerDelay * */speedFactor * xSpeed;
+            yLoc += /*AstroidsWindow.timerDelay * */speedFactor * ySpeed;
+            /*
         } else {
-            xLoc -= /*AstroidsWindow.timerDelay * */AstroidsWindow.speedFactor * xSpeed;
-            yLoc -= /*AstroidsWindow.timerDelay * */AstroidsWindow.speedFactor * ySpeed;
+            xLoc -= /*AstroidsWindow.timerDelay * AstroidsWindow.speedFactor * xSpeed;
+            yLoc -= /*AstroidsWindow.timerDelay * AstroidsWindow.speedFactor * ySpeed;
             
             xSpeed -= xAcceleration;
             ySpeed -= yAcceleration;
         }
+    */
         //xSpeed += AstroidsWindow.forwards*xAcceleration;
         //ySpeed += AstroidsWindow.forwards*yAcceleration;
         

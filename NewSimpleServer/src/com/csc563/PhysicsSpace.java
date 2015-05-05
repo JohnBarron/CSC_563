@@ -1,6 +1,9 @@
 package com.csc563;
 
-import com.csc563.AstroidsWindow;
+import com.csc563.Coin;
+import com.csc563.FixedStar;
+import com.csc563.Planet;
+import com.csc563.SpaceToWindow;
 import java.util.Random;
 import java.awt.Color;
 
@@ -22,7 +25,11 @@ public class PhysicsSpace {
     //double currentPairDistance;
     //double orbitDistanceDelta;
     //double orbitDistanceThreshold;
+    int arenaWidth;
+    int arenaHeight;
+    double speedFactor;
     
+    /*
     public PhysicsSpace(){
         G = 1;
         window = new SpaceToWindow();
@@ -44,10 +51,11 @@ public class PhysicsSpace {
             planet[i] = new Planet();
         }
     }
+    */
     
-    public PhysicsSpace(int numShips, int numStars, int numPlanets, int numCoins){
+    public PhysicsSpace(int numShips, int numStars, int numPlanets, int numCoins, int width, int height, double spdFactor){
         G = 32;
-        window = new SpaceToWindow(0, 0, AstroidsWindow.arenaWidth, AstroidsWindow.arenaHeight);
+        window = new SpaceToWindow(0, 0, width, height);
         this.numShips = numShips;
         this.numStars = numStars;// exeptions for bad numbers
         this.numPlanets = numPlanets;
@@ -56,34 +64,44 @@ public class PhysicsSpace {
         star = new FixedStar[numStars];
         planet = new Planet[numPlanets];
         coin = new Coin[numCoins];
+        this.arenaWidth = width;
+        this.arenaHeight = height;
+        this.speedFactor = spdFactor;
         //previousPeriodDistance = new double[numPlanets][numPlanets];
         //previousAngle = new double[numPlanets][numPlanets];
         //orbitDistanceThreshold = 0.1;
         rng = new Random();
         int x, y;
         double m;
-        if(numShips == 1){
-            ship[0] = new Ship();
+        for(int i = 0; i < numShips; i++) {
+            ship[i] = new Ship((double)width/((i+1)*4), (double)height/((i+1)*2), spdFactor);
+        }
+        /*
         }
         if(numShips == 2){
+            ship[0] = new Ship(width/4,);
+        if(numShips == 1){
             ship[0] = new Ship();
-            ship[1] = new Ship(2);
+            ship[1] = new Ship(2, width, height, spdFactor);
         }
+        */
         if(numStars == 1){
-            star[0] = new FixedStar();
+            star[0] = new FixedStar(width, height);
         }
+        /*
         if(numStars == 2){
             star[0] = new FixedStar(500, 400, 1);
             star[1] = new FixedStar(1200, 400, 1);
         }
         if(numStars == 3){
-            star[0] = new FixedStar();
+            star[0] = new FixedStar(width, height);
             star[1] = new FixedStar(500, 400, 1);
             star[2] = new FixedStar(1200, 400, 1);
         }
+        */
         for(i=0; i<numPlanets; i++){
-            x = rng.nextInt(AstroidsWindow.arenaWidth / 4) + AstroidsWindow.arenaWidth * 3 / 8;
-            y = rng.nextInt(AstroidsWindow.arenaHeight / 4) + AstroidsWindow.arenaHeight * 3 / 8;
+            x = rng.nextInt(width / 4) + width * 3 / 8;
+            y = rng.nextInt(height / 4) + height * 3 / 8;
             //x = rng.nextInt(AstroidsWindow.width);
             //y = rng.nextInt(AstroidsWindow.height);
             //x = (int)(rng.nextGaussian() * .5 - 1) * AstroidsWindow.width;
@@ -93,12 +111,12 @@ public class PhysicsSpace {
             //m = rng.nextGaussian() * .5 - 1;
             //m = -1;
             m = 1;
-            planet[i] = new Planet(x, y, m, new Color(rng.nextInt(256),rng.nextInt(256),rng.nextInt(256)));
+            planet[i] = new Planet(x, y, m, new Color(rng.nextInt(256),rng.nextInt(256),rng.nextInt(256)), spdFactor);
             //planet[i].setxAcceleration(.1 * (rng.nextDouble() * 2 - 1));
             //planet[i].setyAcceleration(.1 * (rng.nextDouble() * 2 - 1));
         }
         for(i=0; i<numCoins; i++){
-            coin[i] = new Coin();
+            coin[i] = new Coin(width, height);
         }
     }
     
@@ -127,7 +145,7 @@ public class PhysicsSpace {
     private void updateState() {
         for (i = 0; i < numShips; i++) {
             //ship[i].move();
-            if (AstroidsWindow.forwards) {
+//            if (AstroidsWindow.forwards) {
                 ship[i].setFuel(ship[i].getFuel() - ship[i].getThrust());
 
                 ship[i].setxAcceleration(ship[i].getxAcceleration() + ship[i].getThrust() * org.apache.commons.math.util.FastMath.cos(ship[i].getThrustAngle()));
@@ -136,8 +154,8 @@ public class PhysicsSpace {
                 ship[i].setxSpeed(ship[i].getxSpeed() + ship[i].getxAcceleration());
                 ship[i].setySpeed(ship[i].getySpeed() + ship[i].getyAcceleration());
 
-                ship[i].setxLoc(ship[i].getxLoc() + /*AstroidsWindow.timerDelay * */ AstroidsWindow.speedFactor * ship[i].getxSpeed());
-                ship[i].setyLoc(ship[i].getyLoc() + /*AstroidsWindow.timerDelay * */ AstroidsWindow.speedFactor * ship[i].getySpeed());
+                ship[i].setxLoc(ship[i].getxLoc() + /*AstroidsWindow.timerDelay * */ speedFactor * ship[i].getxSpeed());
+                ship[i].setyLoc(ship[i].getyLoc() + /*AstroidsWindow.timerDelay * */ speedFactor * ship[i].getySpeed());
                 
                 /*
                 if(org.apache.commons.math.util.FastMath.sqrt((ship[i].getxLoc() - ship[j].getxLoc()) * (ship[i].getxLoc() - ship[j].getxLoc()) + (ship[i].getyLoc() - ship[j].getyLoc()) * (ship[i].getyLoc() - ship[j].getyLoc())) < ship[i].getSize() + ship[j].getSize()){
@@ -156,7 +174,6 @@ public class PhysicsSpace {
                     ship[i].setxLoc(ship[i].getxLoc() + /*AstroidsWindow.timerDelay *  AstroidsWindow.speedFactor * ship[i].getxSpeed());
                     ship[i].setyLoc(ship[i].getyLoc() + /*AstroidsWindow.timerDelay *  AstroidsWindow.speedFactor * ship[i].getySpeed());
                 }
-                */
                 
             } else {
                 ship[i].setFuel(ship[i].getFuel() + ship[i].getThrust());
@@ -167,10 +184,11 @@ public class PhysicsSpace {
                 ship[i].setxSpeed(ship[i].getxSpeed() - ship[i].getxAcceleration());
                 ship[i].setySpeed(ship[i].getySpeed() - ship[i].getyAcceleration());
 
-                ship[i].setxLoc(ship[i].getxLoc() - /*AstroidsWindow.timerDelay * */ AstroidsWindow.speedFactor * ship[i].getxSpeed());
-                ship[i].setyLoc(ship[i].getyLoc() - /*AstroidsWindow.timerDelay * */ AstroidsWindow.speedFactor * ship[i].getySpeed());
+                ship[i].setxLoc(ship[i].getxLoc() - /*AstroidsWindow.timerDelay *  AstroidsWindow.speedFactor * ship[i].getxSpeed());
+                ship[i].setyLoc(ship[i].getyLoc() - /*AstroidsWindow.timerDelay *  AstroidsWindow.speedFactor * ship[i].getySpeed());
                 
             }
+                */
 
 /*            fuelColor = fuel * 255 / 10;
             if (fuelColor > 255) {
@@ -279,7 +297,7 @@ public class PhysicsSpace {
             for(j=0; j<numCoins; j++){
                 if(org.apache.commons.math.util.FastMath.sqrt((ship[i].getxLoc() - coin[j].getxLoc()) * (ship[i].getxLoc() - coin[j].getxLoc()) + (ship[i].getyLoc() - coin[j].getyLoc()) * (ship[i].getyLoc() - coin[j].getyLoc())) < ship[i].getSize() + coin[j].getSize()){
                     ship[i].setFuel(ship[i].getFuel() + 1);
-                    coin[j] = new Coin();
+                    coin[j] = new Coin(arenaWidth, arenaHeight);
                 }
             }
         }

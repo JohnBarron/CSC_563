@@ -1,9 +1,9 @@
 package com.csc563;
 
-import com.csc563.AstroidsWindow;
 import java.lang.Math.*;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.Random;
 
 public class Ship {
     private double xLoc;
@@ -23,6 +23,9 @@ public class Ship {
     private double fuelColor;
     private int size;//radius
     private boolean isAlive;
+    private double speedFactor;
+    private Random rng;
+    public int colorRandom;
     
     public Ship(){
         xLoc = 150;
@@ -41,12 +44,13 @@ public class Ship {
         isAlive = true;
     }
     
-    public Ship(int playerNum){
-        if (playerNum == 2) {
-            xLoc = 1000;
-            yLoc = 1000;
-            color = new Color(255,78,0);
-        }
+    public Ship(double xLocation, double yLocation, double spdFactor){
+        xLoc = xLocation;
+        yLoc = yLocation;
+        rng = new Random();
+        colorRandom = rng.nextInt(256);
+        color = new Color(colorRandom);
+
         xSpeed = 0;
         ySpeed = -0.1;
         thrust = 0;
@@ -58,6 +62,7 @@ public class Ship {
         fuel = 1;
         size = 20;
         isAlive = true;
+        speedFactor = spdFactor;
     }
     
     public void bounce(double angle){
@@ -164,7 +169,7 @@ public class Ship {
         //xAcceleration += thrust * java.lang.Math.cos(thrustAngle);// + g * java.lang.Math.cos(gAngle);
         //yAcceleration += thrust * java.lang.Math.sin(thrustAngle);// + g * java.lang.Math.sin(gAngle);
         
-        if(AstroidsWindow.forwards){
+//        if(AstroidsWindow.forwards){
             fuel -= getThrust();
             
             xAcceleration += getThrust() * org.apache.commons.math.util.FastMath.cos(getThrustAngle());
@@ -173,8 +178,9 @@ public class Ship {
             xSpeed += xAcceleration;
             ySpeed += yAcceleration;
             
-            setxLoc(xLoc + AstroidsWindow.speedFactor * xSpeed);
-            setyLoc(yLoc + AstroidsWindow.speedFactor * ySpeed);
+            setxLoc(xLoc + speedFactor * xSpeed);
+            setyLoc(yLoc + speedFactor * ySpeed);
+            /*
         } else {
             fuel += getThrust();
             
@@ -187,6 +193,7 @@ public class Ship {
             xSpeed -= xAcceleration;
             ySpeed -= yAcceleration;
         }
+            */
         
         fuelColor = fuel * 255 / 10;
         if(fuelColor > 255){

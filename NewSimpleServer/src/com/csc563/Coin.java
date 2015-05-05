@@ -1,6 +1,5 @@
 package com.csc563;
 
-import com.csc563.AstroidsWindow;
 import java.util.Random;
 import java.awt.Color;
 
@@ -11,10 +10,10 @@ public class Coin {
     private int size;
     private Random rng;
     
-    public Coin() {
+    public Coin(int width, int height) {
         rng = new Random();
-        xLoc = rng.nextInt(AstroidsWindow.arenaWidth);
-        yLoc = rng.nextInt(AstroidsWindow.arenaHeight);
+        xLoc = rng.nextInt(width);
+        yLoc = rng.nextInt(height);
         color = Color.YELLOW;
         size = 5;
     }

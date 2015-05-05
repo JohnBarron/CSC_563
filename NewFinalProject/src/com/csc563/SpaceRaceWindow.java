@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
 // John Barron
 // 1-5-12
 
-public class AstroidsWindow extends Frame{
+public class SpaceRaceWindow extends Frame{
     private static final Toolkit toolkit = Toolkit.getDefaultToolkit();
     private static final Dimension screenSize = toolkit.getScreenSize();
     public static final int width = (int)screenSize.getWidth(), height = (int)screenSize.getHeight();
@@ -27,7 +27,6 @@ public class AstroidsWindow extends Frame{
     private int numStars = 0;
     private int numPlanets = 0;
     private int numCoins = 10;
-    private PhysicsSpace s1 = new PhysicsSpace(numShips, numStars, numPlanets, numCoins);
     private int focusPlanetIndex;
     private Image dbImage; // For double buffer
     private Graphics dbg;
@@ -39,7 +38,8 @@ public class AstroidsWindow extends Frame{
     public static boolean forwards = true;
     private boolean planetFocus = false;
     private boolean bouncyEdges = true;
-    
+    private Random rng;
+
     public SocketClient client;
     public String serverAddr;
     public String playerName;
@@ -51,7 +51,7 @@ public class AstroidsWindow extends Frame{
     private int i, xPixel, yPixel;
     private int tempSize;
     
-    public AstroidsWindow() throws IOException {
+    public SpaceRaceWindow() throws IOException {
         super("Astroids");
         setSize(width, height);
         setLocation(0, 0);
@@ -72,7 +72,7 @@ public class AstroidsWindow extends Frame{
 
         // Register the window with a keyboard listener
         addKeyListener(new keyListener());
-        addMouseListener(new MousePressListener());
+//        addMouseListener(new MousePressListener());
         //addMouseMotionListener(new MouseMoveListener());
         
         ActionListener forceTimer = new ActionListener() {
@@ -83,6 +83,7 @@ public class AstroidsWindow extends Frame{
                         //s1.getPlanet()[i].getxLoc();
                         //s1.getPlanet()[i].getyLoc();
                         //s1.window.getX();
+                        /*
                         if (s1.getPlanet()[i].getxLoc() < s1.window.getX() && s1.getPlanet()[i].getxSpeed() < 0) {
                             s1.getPlanet()[i].setxSpeed(s1.getPlanet()[i].getxSpeed() * -1);
                         }
@@ -95,11 +96,13 @@ public class AstroidsWindow extends Frame{
                         if (s1.getPlanet()[i].getyLoc() >= s1.window.getY() + s1.window.getWindowHeight() && s1.getPlanet()[i].getySpeed() > 0) {
                             s1.getPlanet()[i].setySpeed(s1.getPlanet()[i].getySpeed() * -1);
                         }
+                        */
                     }
                     for (i = 0; i < numShips; i++) {
                         //s1.getShip()[i].getxLoc();
                         //s1.getShip()[i].getyLoc();
                         //s1.window.getX();
+                        /*
                         if (s1.getShip()[i].getxLoc() - s1.getShip()[i].getSize() < s1.window.getX() && s1.getShip()[i].getxSpeed() < 0) {
                             s1.getShip()[i].setxSpeed(s1.getShip()[i].getxSpeed() * -1);
                             //s1.getShip()[i].bounce(0);
@@ -116,9 +119,10 @@ public class AstroidsWindow extends Frame{
                             s1.getShip()[i].setySpeed(s1.getShip()[i].getySpeed() * -1);
                             //s1.getShip()[i].bounce(3*Math.PI/2);
                         }
+                        */
                     }
                 }
-                s1.simStep();
+                //s1.simStep();
                 //repaint();//moved to slower timer
             }
         };
@@ -239,6 +243,15 @@ public class AstroidsWindow extends Frame{
                     for(int i = 1; i < parts.length; i++) {
                         g.drawString(parts[i], HUDx + 10, HUDy + (i * 100));
                     }
+                    break;
+                case "5":
+ //                   g.setColor(new Color(new Integer(parts[2])));
+                    g.setColor(Color.WHITE);
+                    xPixel = new Integer(parts[3]);
+                    yPixel = new Integer(parts[4]); 
+                    tempSize = 20;
+                    g.fillOval(xPixel-tempSize, yPixel-tempSize, tempSize*2, tempSize*2);
+                    break;
             }
         }
     }
@@ -305,16 +318,16 @@ public class AstroidsWindow extends Frame{
             
             if(c == 'a'){
                 planetFocus = false;
-                s1.window.panLeft(10);
+                //s1.window.panLeft(10);
             } else if(c == 's'){
                 planetFocus = false;
-                s1.window.panDown(10);
+                //s1.window.panDown(10);
             } else if(c == 'd'){
                 planetFocus = false;
-                s1.window.panRight(10);
+                //s1.window.panRight(10);
             } else if(c == 'w'){
                 planetFocus = false;
-                s1.window.panUp(10);
+                //s1.window.panUp(10);
             } else if(c == 'r') {
                 String loginAttempt = "2|" + playerName;
                 client.send(loginAttempt);
@@ -338,10 +351,10 @@ public class AstroidsWindow extends Frame{
                 }
             } else if(c == 'x'){
                 //planetFocus = false;
-                s1.window.zoom(2);
+                //s1.window.zoom(2);
             } else if(c == 'z'){
                 //planetFocus = false;
-                s1.window.zoom(.5);
+                //s1.window.zoom(.5);
             } else if(c == 'g' && timerDelay >= 2){
                 timerDelay /= 2;
                 timer.setDelay(timerDelay);
@@ -357,13 +370,14 @@ public class AstroidsWindow extends Frame{
         
         public void keyReleased(KeyEvent e){
             if(numShips > 0){
-                s1.getShip()[0].setThrust(0.0);
+                //s1.getShip()[0].setThrust(0.0);
                 if(numShips > 1){
-                    s1.getShip()[1].setThrust(0.0);
+                    //s1.getShip()[1].setThrust(0.0);
                 }
             }
         }
     }
+    /*
     private class MousePressListener extends MouseAdapter{
 //        public void mouseMoved(MouseEvent e){
 //            s1.getShip()[0].setThrustAngle(org.apache.commons.math.util.FastMath.atan2(s1.window.yPixel(s1.getShip()[0].getyLoc()) - e.getY(), e.getX() - s1.window.xPixel(s1.getShip()[0].getxLoc())));
@@ -391,4 +405,5 @@ public class AstroidsWindow extends Frame{
             }
         }
     }
+    */
 }
