@@ -273,7 +273,7 @@ public class SpaceRaceWindow extends Frame{
     private void displayPlayerStatus(String playerStatusStr, Graphics g) {
         String[] playerStatus = playerStatusStr.split(",");
         for(int i = 0; i < playerStatus.length; i++) {
-            System.out.println(playerStatus[i]);
+            //System.out.println(playerStatus[i]);
             if(playerStatus[i] != "") {
                 String[] statusParts = playerStatus[i].split("\\|");
                 g.setColor(new Color(new Integer(statusParts[2])));
