@@ -45,7 +45,9 @@ public class SpaceRaceWindow extends Frame{
     public String playerName;
     public int port; 
     public Thread clientThread;
-    public String messageOnScreen;
+    public String messageOnScreen = "";
+    public String playerStatusString = "";
+    public String coinStatusString = "";
 
     private JFrame frame = new JFrame("NewFinalProject");
     private int i, xPixel, yPixel;
@@ -166,7 +168,7 @@ public class SpaceRaceWindow extends Frame{
             dbg = dbImage.getGraphics();
         }
         if (!trails) {
-            dbg.setColor(Color.BLACK);
+            dbg.setColor(Color.GRAY);
             dbg.fillRect(0, 0, width, height);
         }
         paint(dbg);
@@ -225,8 +227,9 @@ public class SpaceRaceWindow extends Frame{
 //        s1.getStar()[2].draw(g);
         */
         g.drawLine(HUDx, HUDy, HUDx, HUDheight);
-        if(messageOnScreen != null) {
-            String[] parts = messageOnScreen.split("\\|");
+        if(messageOnScreen != "") {
+            String[] playerStatus = messageOnScreen.split(",");
+            String[] parts = playerStatus[0].split("\\|");
             g.setColor(Color.WHITE);
             g.drawLine(HUDx, HUDy, HUDx, HUDheight);
             switch (parts[0]) {
@@ -245,17 +248,55 @@ public class SpaceRaceWindow extends Frame{
                     }
                     break;
                 case "5":
-                    g.setColor(new Color(new Integer(parts[2])));
-                    //g.setColor(Color.WHITE);
-                    xPixel = new Integer(parts[3]);
-                    yPixel = new Integer(parts[4]); 
-                    tempSize = 20;
-                    g.fillOval(xPixel-tempSize, yPixel-tempSize, tempSize*2, tempSize*2);
+                    playerStatusString = messageOnScreen;
+                    displayPlayerStatus(playerStatusString, g);
+                    messageOnScreen = "";
+                    break;
+                case "6":
+                    coinStatusString = messageOnScreen;
+                    messageOnScreen = "";
+                default:
                     break;
             }
         }
+        if(playerStatusString != "") {
+            g.drawLine(HUDx, HUDy, HUDx, HUDheight);
+            displayPlayerStatus(playerStatusString, g);
+        }
+        if(coinStatusString != "") {
+            g.drawLine(HUDx, HUDy, HUDx, HUDheight);
+            displayCoinStatus(coinStatusString, g);
+        }
     }
 
+    private void displayPlayerStatus(String playerStatusStr, Graphics g) {
+        String[] playerStatus = playerStatusStr.split(",");
+        for(int i = 0; i < playerStatus.length; i++) {
+            String[] statusParts = playerStatus[i].split("\\|");
+            g.setColor(new Color(new Integer(statusParts[2])));
+            //g.setColor(Color.WHITE);
+            xPixel = new Integer(statusParts[3]);
+            yPixel = new Integer(statusParts[4]); 
+            tempSize = 20;
+            g.fillOval(xPixel-tempSize, yPixel-tempSize, tempSize*2, tempSize*2);
+            String playerInfo = statusParts[1] + ":" + statusParts[5];
+            //System.out.println(playerInfo);
+            g.drawString(playerInfo, HUDx + 10, HUDy + ((i+1) * 100));
+        }
+        
+    }
+
+    private void displayCoinStatus(String coinStatusStr, Graphics g) {
+        String[] coinStatus = coinStatusStr.split(",");
+        for(int i = 0; i < coinStatus.length; i++) {
+            String[] statusParts = coinStatus[i].split("\\|");
+            g.setColor(new Color(new Integer(statusParts[1])));
+            xPixel = new Integer(statusParts[2]);
+            yPixel = new Integer(statusParts[3]); 
+            tempSize = 5;
+            g.drawOval(xPixel-tempSize, yPixel-tempSize, tempSize*2, tempSize*2);
+        }
+    }
     // public void paint(graphics g){}
 
     private class keyListener extends KeyAdapter {
@@ -265,102 +306,29 @@ public class SpaceRaceWindow extends Frame{
             //TODO: optionally make it work with multiple keys pressed
             //      as a player would expect ex. 'w' and 'd' makes angle = PI/4
             c = e.getKeyChar();
-            /*
-            if (numShips > 0) {
-                if(c == 's') {
-                    s1.getShip()[0].setThrustAngle(3 * Math.PI / 2);
-                    s1.getShip()[0].setThrustMaximum();
-                } else if(c == 'a') {
-                    s1.getShip()[0].setThrustAngle(Math.PI);
-                    s1.getShip()[0].setThrustMaximum();
-                } else if(c == 'w') {
-                    s1.getShip()[0].setThrustAngle(Math.PI / 2);
-                    s1.getShip()[0].setThrustMaximum();
-                } else if(c == 'd') {
-                    s1.getShip()[0].setThrustAngle(0.0);
-                    s1.getShip()[0].setThrustMaximum();
-                }
-                if (numShips > 1) {
-                    if (c == 'k') {
-                        s1.getShip()[1].setThrustAngle(3 * Math.PI / 2);
-                        s1.getShip()[1].setThrustMaximum();
-                    } else if (c == 'j') {
-                        s1.getShip()[1].setThrustAngle(Math.PI);
-                        s1.getShip()[1].setThrustMaximum();
-                    } else if (c == 'i') {
-                        s1.getShip()[1].setThrustAngle(Math.PI / 2);
-                        s1.getShip()[1].setThrustMaximum();
-                    } else if (c == 'l') {
-                        s1.getShip()[1].setThrustAngle(0.0);
-                        s1.getShip()[1].setThrustMaximum();
-                    }
-                }
-            } else {
-                if(c == 'a'){
-                    planetFocus = false;
-                    s1.window.panLeft(10);
-                } else if(c == 's'){
-                    planetFocus = false;
-                    s1.window.panDown(10);
-                } else if(c == 'd'){
-                    planetFocus = false;
-                    s1.window.panRight(10);
-                } else if(c == 'w'){
-                    planetFocus = false;
-                    s1.window.panUp(10);
-                } else if(c == 'r') {
-                    String loginAttempt = "2|ready";
-                    client.send(loginAttempt);
-                }
-                
-            }
-                    */
-            
             if(c == 'a'){
-                planetFocus = false;
+                String aStr = "7|" + playerName + "|a";
+                client.send(aStr);
+                //planetFocus = false;
                 //s1.window.panLeft(10);
             } else if(c == 's'){
-                planetFocus = false;
+                String sStr = "7|" + playerName + "|s";
+                client.send(sStr);
+                //planetFocus = false;
                 //s1.window.panDown(10);
             } else if(c == 'd'){
-                planetFocus = false;
+                String dStr = "7|" + playerName + "|d";
+                client.send(dStr);
+                //planetFocus = false;
                 //s1.window.panRight(10);
             } else if(c == 'w'){
-                planetFocus = false;
+                String wStr = "7|" + playerName + "|w";
+                client.send(wStr);
+                //planetFocus = false;
                 //s1.window.panUp(10);
             } else if(c == 'r') {
                 String loginAttempt = "2|" + playerName + "|" + arenaWidth + "|" + arenaHeight;
                 client.send(loginAttempt);
-            } else if(c == 'q'){
-                if(trails){
-                    trails = false;
-                } else{
-                    trails = true;
-                }
-            } else if(c == 'e'){
-                if(forwards){
-                    forwards = false;
-                } else{
-                    forwards = true;
-                }
-            } else if(c == 't'){
-                if(timer.isRunning()){
-                    timer.stop();
-                }else{
-                    timer.start();
-                }
-            } else if(c == 'x'){
-                //planetFocus = false;
-                //s1.window.zoom(2);
-            } else if(c == 'z'){
-                //planetFocus = false;
-                //s1.window.zoom(.5);
-            } else if(c == 'g' && timerDelay >= 2){
-                timerDelay /= 2;
-                timer.setDelay(timerDelay);
-            } else if(c == 'f'){
-                timerDelay *= 2;
-                timer.setDelay(timerDelay);
             } else if(c == 'p'){
                 clientThread.stop();
                 
