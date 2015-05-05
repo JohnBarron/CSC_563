@@ -35,6 +35,7 @@ public class SimpleGameClient extends Frame {
     private Graphics dbg;
     private Image dbImage;
     private static final int width = 600, height = 600;
+    private static final int numCoins = 10;
     
     //private JTextField textField = new JTextField(40);
     //private JTextArea messageArea = new JTextArea(8, 40);
@@ -168,7 +169,7 @@ public class SimpleGameClient extends Frame {
             //}
             repaint();
         }
-        toDraw = new thingsToDraw(numPlayers);
+        toDraw = new thingsToDraw(numPlayers, numCoins);
         //in.close();
         //out.close();
         //socket.close();
