@@ -108,19 +108,19 @@ public class Client implements Runnable{
                             if(c.playerName.equalsIgnoreCase(splitter[1])) {
                                 switch(keyPressed) {
                                     case "a":
-                                        xLoc--;
+                                        xLoc-=5;
                                         c.ship.setxLoc((double)xLoc);
                                         break;
                                     case "s":
-                                        yLoc++;
+                                        yLoc+=5;
                                         c.ship.setyLoc((double)yLoc);
                                         break;
                                     case "w":
-                                        yLoc--;
+                                        yLoc-=5;
                                         c.ship.setyLoc((double)yLoc);
                                         break;
                                     case "d":
-                                        xLoc++;
+                                        xLoc+=5;
                                         c.ship.setxLoc((double)xLoc);
                                         break;
                                 }
