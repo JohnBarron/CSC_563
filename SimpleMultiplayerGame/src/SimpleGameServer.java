@@ -27,7 +27,7 @@ public class SimpleGameServer {
     private static boolean allReady = false;
     
     private static javax.swing.Timer timer , secTimer;
-    private static int timerDelay = 32, secTimerDelay = 1000;
+    private static int timerDelay = 16, secTimerDelay = 1000;
     private static volatile int elapsedSeconds = 0;
     
     //private static DatagramPacket datagramOut;
@@ -122,10 +122,13 @@ public class SimpleGameServer {
             this.socket.setTcpNoDelay(true);
             playerNum = numPlayers;
             ready = false;
-            if(playerNum == 2){
-                xLoc = 200;
-                yLoc = 200;
-            }
+            //if(playerNum == 2){
+            //    xLoc = 200;
+            //    yLoc = 200;
+            //
+            //}
+            xLoc = 100 + 40 * playerNum;
+            yLoc = xLoc;
             //datagramIn = new DatagramPacket(inByte, inByte.length);
         }
 

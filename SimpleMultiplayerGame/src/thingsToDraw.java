@@ -3,14 +3,18 @@ public class thingsToDraw {
     private int[] shipXofPlayer;
     private int[] shipYofPlayer;
     
-    thingsToDraw(){
-        shipXofPlayer = new int[3];
-        shipYofPlayer = new int[3];
-    }
+    //thingsToDraw(){
+    //    shipXofPlayer = new int[3];
+    //    shipYofPlayer = new int[3];
+    //}
     
     thingsToDraw(int numPlayers){
         shipXofPlayer = new int[numPlayers];
         shipYofPlayer = new int[numPlayers];
+        for(int i = 0; i < numPlayers; i++){
+            shipXofPlayer[0] = 0;
+            shipYofPlayer[0] = 0;
+        }
     }
 
     public int[] getShipXofPlayer() {

@@ -73,7 +73,7 @@ public class SimpleGameClient extends Frame {
         super("Simple Game");
         setSize(600, 600);
         setLocation(0, 0);
-        //setUndecorated(true);
+        //setUndecorated(true);//uncomment this line when not testing on a single PC
         frameTimer = new Timer(frameTimerDelay, frameRenderTimer);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
