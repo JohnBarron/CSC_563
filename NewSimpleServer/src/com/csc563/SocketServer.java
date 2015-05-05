@@ -80,22 +80,45 @@ public class SocketServer {
     }
     
     public void createPhysicsSpace() {
-        s1 = new PhysicsSpace(ConnectedClients, 0, 0, 100, arenaWidth, arenaHeight, speedFactor);
+        s1 = new PhysicsSpace(ConnectedClients, 0, 0, 50, arenaWidth, arenaHeight, speedFactor);
         int i = 0;
         String output = "";
+        String temp = "";
         for(Object cl : this.ConnectedClients){
             Client c = (Client)cl;
             int xLoc = (int)c.ship.getxLoc();
             int yLoc = (int)c.ship.getyLoc();
-            output = "5|" + c.playerName + "|" + c.ship.colorRandom + "|" +
-                    xLoc + "|" + yLoc + "|0";
-            System.out.println(output);
-            for(Object c2 : this.ConnectedClients){
-                Client client = (Client)c2;
-                client.out.println(output);
-                client.out.flush();
+            if(i == 0) {
+                temp = "5|" + c.playerName + "|" + c.ship.colorRandom + "|" +
+                        xLoc + "|" + yLoc + "|0";
             }
+            else {
+                temp = ",5|" + c.playerName + "|" + c.ship.colorRandom + "|" +
+                        xLoc + "|" + yLoc + "|0";
+            }
+            output += temp;
+            i++;
+            System.out.println(output);
         }
+        SendOutputToAll(output);
+        output = "";
+        for(i=0; i < s1.numCoins; i++){
+            int xLoc = (int)s1.getCoin()[i].getxLoc();
+            int yLoc = (int)s1.getCoin()[i].getyLoc();
+            if(i == 0) {
+                temp = "6|" + s1.getCoin()[i].getColor().getRGB() + "|" + 
+                        xLoc + "|" + yLoc;
+            }
+            else {
+                temp = ",6|" + s1.getCoin()[i].getColor().getRGB() + "|" + 
+                        xLoc + "|" + yLoc;
+            }
+            output += temp;
+            i++;
+        }
+        System.out.println(output);
+        SendOutputToAll(output);
+
     }
 }
 
