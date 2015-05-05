@@ -6,6 +6,7 @@ import com.csc563.Planet;
 import com.csc563.SpaceToWindow;
 import java.util.Random;
 import java.awt.Color;
+import java.util.ArrayList;
 
 public class PhysicsSpace {
     private Ship[] ship;
@@ -53,10 +54,10 @@ public class PhysicsSpace {
     }
     */
     
-    public PhysicsSpace(int numShips, int numStars, int numPlanets, int numCoins, int width, int height, double spdFactor){
+    public PhysicsSpace(ArrayList connectedClients, int numStars, int numPlanets, int numCoins, int width, int height, double spdFactor){
         G = 32;
         window = new SpaceToWindow(0, 0, width, height);
-        this.numShips = numShips;
+        this.numShips = connectedClients.size();
         this.numStars = numStars;// exeptions for bad numbers
         this.numPlanets = numPlanets;
         this.numCoins = numCoins;
@@ -75,6 +76,7 @@ public class PhysicsSpace {
         double m;
         for(int i = 0; i < numShips; i++) {
             ship[i] = new Ship((double)width/((i+1)*4), (double)height/((i+1)*2), spdFactor);
+            ((Client)connectedClients.get(i)).ship = ship[i];
         }
         /*
         }

@@ -8,8 +8,8 @@ public class SocketServer {
     public int port;
     public Socket s;
     public ArrayList ConnectedClients = new ArrayList<>();
-    public static final int arenaHeight = 1366;
-    public static final int arenaWidth = 768;
+    public static int arenaHeight;
+    public static int arenaWidth;
     public static final double speedFactor = 16;
     
     private PhysicsSpace s1 = null;
@@ -80,14 +80,21 @@ public class SocketServer {
     }
     
     public void createPhysicsSpace() {
-        s1 = new PhysicsSpace(ConnectedClients.size(), 0, 0, 100, arenaWidth, arenaHeight, speedFactor);
+        s1 = new PhysicsSpace(ConnectedClients, 0, 0, 100, arenaWidth, arenaHeight, speedFactor);
         int i = 0;
+        String output = "";
         for(Object cl : this.ConnectedClients){
             Client c = (Client)cl;
-            String output="5|" + c.playerName + "|" + s1.getShip()[i].colorRandom + "|" +
-                    s1.getShip()[i].getxLoc() + "|" + s1.getShip()[i].getyLoc() + "|0";
-            c.out.println(output);
-            c.out.flush();
+            int xLoc = (int)c.ship.getxLoc();
+            int yLoc = (int)c.ship.getyLoc();
+            output = "5|" + c.playerName + "|" + c.ship.colorRandom + "|" +
+                    xLoc + "|" + yLoc + "|0";
+            System.out.println(output);
+            for(Object c2 : this.ConnectedClients){
+                Client client = (Client)c2;
+                client.out.println(output);
+                client.out.flush();
+            }
         }
     }
 }

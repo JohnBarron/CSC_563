@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 
@@ -21,6 +22,7 @@ public class Client implements Runnable{
     public PrintWriter out;
     public boolean readyState;
     public String playerName;
+    public Ship ship;
 	
     public Client(SocketServer s)
     {
@@ -73,6 +75,8 @@ public class Client implements Runnable{
                         if(!readyState) {
                             this.readyState = true;
                             this.playerName = splitter[1];
+                            server.arenaWidth = new Integer(splitter[2]);
+                            server.arenaHeight = new Integer(splitter[3]);
                             server.ConnectedClients.add(this);
                             System.out.println("Client is in ready state.");
                         }
