@@ -56,6 +56,7 @@ public class SocketClient implements Runnable {
                         ui.paint(ui.getGraphics());
                         break;
                     case "5":
+                        ui.messageOnScreen = message;
                         ui.paint(ui.getGraphics());
                         break;
                     case "8":

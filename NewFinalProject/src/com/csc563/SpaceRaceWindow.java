@@ -16,7 +16,7 @@ import javax.swing.JOptionPane;
 public class SpaceRaceWindow extends Frame{
     private static final Toolkit toolkit = Toolkit.getDefaultToolkit();
     private static final Dimension screenSize = toolkit.getScreenSize();
-    public static final int width = (int)screenSize.getWidth(), height = (int)screenSize.getHeight();
+    public static final int width = 1366, height = 768;
     public static final int arenaHeight = height;
     public static final int arenaWidth = height;
     public static final int HUDheight = height; //not sure if these should all be public static final
@@ -245,8 +245,8 @@ public class SpaceRaceWindow extends Frame{
                     }
                     break;
                 case "5":
- //                   g.setColor(new Color(new Integer(parts[2])));
-                    g.setColor(Color.WHITE);
+                    g.setColor(new Color(new Integer(parts[2])));
+                    //g.setColor(Color.WHITE);
                     xPixel = new Integer(parts[3]);
                     yPixel = new Integer(parts[4]); 
                     tempSize = 20;
@@ -329,7 +329,7 @@ public class SpaceRaceWindow extends Frame{
                 planetFocus = false;
                 //s1.window.panUp(10);
             } else if(c == 'r') {
-                String loginAttempt = "2|" + playerName;
+                String loginAttempt = "2|" + playerName + "|" + arenaWidth + "|" + arenaHeight;
                 client.send(loginAttempt);
             } else if(c == 'q'){
                 if(trails){
