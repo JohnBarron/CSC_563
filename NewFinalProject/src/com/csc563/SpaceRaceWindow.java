@@ -226,6 +226,7 @@ public class SpaceRaceWindow extends Frame{
 //        s1.getStar()[1].draw(g);
 //        s1.getStar()[2].draw(g);
         */
+        g.setColor(Color.WHITE);
         g.drawLine(HUDx, HUDy, HUDx, HUDheight);
         if(messageOnScreen != "") {
             String[] playerStatus = messageOnScreen.split(",");
