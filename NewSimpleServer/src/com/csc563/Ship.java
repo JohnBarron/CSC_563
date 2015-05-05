@@ -26,6 +26,7 @@ public class Ship {
     private double speedFactor;
     private Random rng;
     public int colorRandom;
+    public int coinsCollected;
     
     public Ship(){
         xLoc = 150;
@@ -42,6 +43,7 @@ public class Ship {
         fuel = 1;
         size = 20;
         isAlive = true;
+        coinsCollected = 0;
     }
     
     public Ship(double xLocation, double yLocation, double spdFactor){
@@ -63,6 +65,7 @@ public class Ship {
         size = 20;
         isAlive = true;
         speedFactor = spdFactor;
+        coinsCollected = 0;
     }
     
     public void bounce(double angle){

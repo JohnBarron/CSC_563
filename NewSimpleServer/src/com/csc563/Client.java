@@ -102,6 +102,7 @@ public class Client implements Runnable{
                         output = ""; 
                         for (Object cl : server.ConnectedClients) {
                             Client c = (Client) cl;
+                            server.checkForCollision(ship);
                             int xLoc = (int)c.ship.getxLoc();
                             int yLoc = (int)c.ship.getyLoc();
                             if(c.playerName.equalsIgnoreCase(splitter[1])) {
@@ -126,11 +127,11 @@ public class Client implements Runnable{
                             }
                             if(i == 0) {
                                 temp = "5|" + c.playerName + "|" + c.ship.colorRandom + "|" +
-                                        xLoc + "|" + yLoc + "|0";
+                                        xLoc + "|" + yLoc + "|" + c.ship.coinsCollected;
                             }
                             else {
                                 temp = ",5|" + c.playerName + "|" + c.ship.colorRandom + "|" +
-                                        xLoc + "|" + yLoc + "|0";
+                                        xLoc + "|" + yLoc + "|" + c.ship.coinsCollected;
                             }
                             output += temp;
                             i++;
