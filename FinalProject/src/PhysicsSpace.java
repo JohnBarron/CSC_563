@@ -202,8 +202,18 @@ public class PhysicsSpace {
                     //Do nothing to the component of velocity in the perpendicular direction
                     //Reverse (-1*) the component of velocity in the gAngle direction
                     //Apply to the horizontal-vertical basis
-                    ship[i].bounce(gAngle - Math.PI/2);
-                    ship[j].bounce(gAngle + Math.PI/2);
+                    
+                    //use bounce() to reflect and keep speed constant
+                    //ship[i].bounce(gAngle - Math.PI/2);
+                    //ship[j].bounce(gAngle + Math.PI/2);
+                    
+                    //ships i and j swap velocities.
+                    double tempx = ship[j].getxSpeed();
+                    double tempy = ship[j].getySpeed();
+                    ship[j].setxSpeed(ship[i].getxSpeed());
+                    ship[j].setySpeed(ship[i].getySpeed());
+                    ship[i].setxSpeed(tempx);
+                    ship[i].setySpeed(tempy);
                 }
                 // force from ship[j] acting on ship[i]:
                 g = G * /*AstroidsWindow.forwards*-1.0**/ship[j].getMass()/((ship[j].getxLoc()-ship[i].getxLoc())*(ship[j].getxLoc()-ship[i].getxLoc())+(ship[j].getyLoc()-ship[i].getyLoc())*(ship[j].getyLoc()-ship[i].getyLoc()));
