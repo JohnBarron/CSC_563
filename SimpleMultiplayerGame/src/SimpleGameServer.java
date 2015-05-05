@@ -26,7 +26,7 @@ public class SimpleGameServer {
     private static boolean allReady = false;
     
     private static javax.swing.Timer timer , secTimer;
-    private static int timerDelay = 16, secTimerDelay = 1000;
+    private static int timerDelay = 32, secTimerDelay = 1000;
     private static volatile int elapsedSeconds = 0;
     
     //private static DatagramPacket datagramOut;
@@ -35,7 +35,21 @@ public class SimpleGameServer {
     
         static ActionListener forceTimer = new ActionListener() {
             public void actionPerformed(ActionEvent e){
-                for(ClientHandler clienti : clientHandler){
+                for(ClientHandler clienti : clientHandler){//for all the players
+                    //send all the locations of things
+                    for (ClientHandler clientj : clientHandler) {//for all the ships
+                        try{
+                            outByte[0] = (byte) clientj.xLoc;
+                            clienti.outStream.write(outByte);
+                            clienti.outStream.flush();
+                            outByte[0] = (byte) clientj.yLoc;
+                            clienti.outStream.write(outByte);
+                            clienti.outStream.flush();
+                        }catch (IOException ex){
+                            System.out.println(ex);
+                        }
+                    }
+                    /*
                     for (ClientHandler clientj : clientHandler) {
                         try {
                             outByte[0] = (byte) clienti.xLoc;
@@ -53,7 +67,7 @@ public class SimpleGameServer {
                         } catch (IOException ex) {
                             System.out.println(ex);
                         }
-                    }
+                    }*/
                 }
             }
         };
