@@ -59,7 +59,9 @@ public class SimpleGameClient extends Frame {
     private static javax.swing.Timer frameTimer;
     
     private int gameInput;
-    private int xLoc = 0, yLoc = 0, xLoc2 = 0, yLoc2 = 0;
+    private int[] xLocations;
+    private int[] yLocations;
+    //xLoc = 0, yLoc = 0, xLoc2 = 0, yLoc2 = 0;
     
     ActionListener frameRenderTimer = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -171,10 +173,18 @@ public class SimpleGameClient extends Frame {
         //socket.close();
         //UDPSoc = new DatagramSocket(UDPport, serverIP);
         frameTimer.start();
+        xLocations = new int[numPlayers];
+        yLocations = new int[numPlayers];
+        int count = 0;
         while(gameStarted){
-            //UDPSoc.receive(serverPacket);
+            //UDPSoc.receive(serverPacketS);
             //line = in.readLine();
-            
+      
+            gameInput = inStream.read();
+            xLocations[count] = gameInput[0];
+            yLocations[count] = gameInput[1];
+            count++;
+            /*
             gameInput = inStream.read();
             xLoc = gameInput;
             gameInput = inStream.read();
@@ -183,6 +193,7 @@ public class SimpleGameClient extends Frame {
             xLoc2 = gameInput;
             gameInput = inStream.read();
             yLoc2 = gameInput;
+            */
             //repaint();//put repaint() on a 16 milisecond timer
         }
 // Process all messages from server, according to the protocol.

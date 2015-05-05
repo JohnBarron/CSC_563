@@ -26,30 +26,22 @@ public class SimpleGameServer {
     private static boolean allReady = false;
     
     private static javax.swing.Timer timer , secTimer;
-    private static int timerDelay = 16, secTimerDelay = 1000;
+    private static int timerDelay = 32, secTimerDelay = 1000;
     private static volatile int elapsedSeconds = 0;
     
     //private static DatagramPacket datagramOut;
-    private static byte[] outByte = new byte[1], inByte = new byte[1];
+    private static byte[] outByte = new byte[2], inByte = new byte[1];
     
     
         static ActionListener forceTimer = new ActionListener() {
             public void actionPerformed(ActionEvent e){
                 for(ClientHandler clienti : clientHandler){
+                    outByte[0] = (byte)clienti.xLoc;
+                    outByte[1] = (byte)clienti.yLoc;
                     for (ClientHandler clientj : clientHandler) {
                         try {
-                            outByte[0] = (byte) clienti.xLoc;
-                            clienti.outStream.write(outByte);
-                            clienti.outStream.flush();
-                            outByte[0] = (byte) clienti.yLoc;
-                            clienti.outStream.write(outByte);
-                            clienti.outStream.flush();
-                            outByte[0] = (byte) clientj.xLoc;
-                            clienti.outStream.write(outByte);
-                            clienti.outStream.flush();
-                            outByte[0] = (byte) clientj.yLoc;
-                            clienti.outStream.write(outByte);
-                            clienti.outStream.flush();
+                            clientj.outStream.write(outByte);
+                            clientj.outStream.flush();
                         } catch (IOException ex) {
                             System.out.println(ex);
                         }
