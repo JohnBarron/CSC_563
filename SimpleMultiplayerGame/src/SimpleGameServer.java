@@ -19,10 +19,11 @@ import javax.swing.Timer;
 
 public class SimpleGameServer {
     private static ServerSocket ss;
+    private static final int maxPlayers = 3;
     //private static DatagramSocket UDPsoc;
     private static final int PORT = 4446;
     //private static final int UDPport = 4447;
-    private static ArrayList<ClientHandler> clientHandler = new ArrayList<>(6);
+    private static ArrayList<ClientHandler> clientHandler = new ArrayList<>(maxPlayers);
     private static boolean allReady = false;
     
     private static javax.swing.Timer timer , secTimer;

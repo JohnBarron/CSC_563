@@ -57,9 +57,11 @@ public class SimpleGameClient extends Frame {
     private byte[] inByte = new byte[1];
     private final int frameTimerDelay = 16;
     private static javax.swing.Timer frameTimer;
+    private static final int shipRadius = 20;
     
     private int gameInput;
-    private int xLoc = 0, yLoc = 0, xLoc2 = 0, yLoc2 = 0;
+    //private int xLoc = 0, yLoc = 0, xLoc2 = 0, yLoc2 = 0;
+    private thingsToDraw toDraw;
     
     ActionListener frameRenderTimer = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -166,6 +168,7 @@ public class SimpleGameClient extends Frame {
             //}
             repaint();
         }
+        toDraw = new thingsToDraw(numPlayers);
         //in.close();
         //out.close();
         //socket.close();
@@ -175,6 +178,12 @@ public class SimpleGameClient extends Frame {
             //UDPSoc.receive(serverPacket);
             //line = in.readLine();
             
+            for(i = 0; i < numPlayers; i++){
+                gameInput = inStream.read();
+                toDraw.setShipXofPlayer(i, gameInput);
+                gameInput = inStream.read();
+                toDraw.setShipYofPlayer(i, gameInput);
+            }/*
             gameInput = inStream.read();
             xLoc = gameInput;
             gameInput = inStream.read();
@@ -182,7 +191,7 @@ public class SimpleGameClient extends Frame {
             gameInput = inStream.read();
             xLoc2 = gameInput;
             gameInput = inStream.read();
-            yLoc2 = gameInput;
+            yLoc2 = gameInput;*/
             //repaint();//put repaint() on a 16 milisecond timer
         }
 // Process all messages from server, according to the protocol.
@@ -212,8 +221,11 @@ public class SimpleGameClient extends Frame {
         else {
             //g.drawString(new Byte(serverPacket.getData()[0]).toString(), width/2, width/2);
             //g.drawString(line, width/2, width/2);
-            g.fillOval(xLoc, yLoc, 10, 10);
-            g.fillOval(xLoc2, yLoc2, 10, 10);
+            //g.fillOval(xLoc, yLoc, 10, 10);
+            //g.fillOval(xLoc2, yLoc2, 10, 10);
+            for(int i = 0; i < numPlayers; i++){
+                g.fillOval(toDraw.getShipXofPlayer()[i]-shipRadius, toDraw.getShipYofPlayer()[i]-shipRadius, shipRadius*2, shipRadius*2);
+            }
         }
     }
     public void update(Graphics g) {
