@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.InputStream;
+import java.io.OutputStream;
 //import java.net.DatagramPacket;
 //import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -12,6 +13,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Timer;
 
 public class SimpleGameServer {
@@ -32,17 +35,36 @@ public class SimpleGameServer {
     
         static ActionListener forceTimer = new ActionListener() {
             public void actionPerformed(ActionEvent e){
-                
+                for(ClientHandler clienti : clientHandler){
+                    for (ClientHandler clientj : clientHandler) {
+                        try {
+                            outByte[0] = (byte) clienti.xLoc;
+                            clienti.outStream.write(outByte);
+                            clienti.outStream.flush();
+                            outByte[0] = (byte) clienti.yLoc;
+                            clienti.outStream.write(outByte);
+                            clienti.outStream.flush();
+                            outByte[0] = (byte) clientj.xLoc;
+                            clienti.outStream.write(outByte);
+                            clienti.outStream.flush();
+                            outByte[0] = (byte) clientj.yLoc;
+                            clienti.outStream.write(outByte);
+                            clienti.outStream.flush();
+                        } catch (IOException ex) {
+                            System.out.println(ex);
+                        }
+                    }
+                }
             }
         };
         
         static ActionListener secClock = new ActionListener() {
             public void actionPerformed(ActionEvent e){
                 //put 60 - elapsedSeconds as a byte in the datagram
-                outByte[0] = new Integer(60 - elapsedSeconds).byteValue();
-                for(ClientHandler clienti : clientHandler){
-                    clienti.out.println(new Integer(60 - elapsedSeconds).toString());
-                }
+                //outByte[0] = new Integer(60 - elapsedSeconds).byteValue();
+                //for(ClientHandler clienti : clientHandler){
+                //    clienti.out.println(new Integer(60 - elapsedSeconds).toString());
+                //}
                 elapsedSeconds++;
             }
         };
@@ -72,15 +94,23 @@ public class SimpleGameServer {
         //private DatagramPacket datagramIn;
         private InetAddress clientIP;
         private InputStream inStream;
+        private OutputStream outStream;
         private BufferedReader in;
         private PrintWriter out;
         private boolean ready;
+        private int gameInput;
+        
+        private int xLoc = 100, yLoc = 100;
 
         public ClientHandler(Socket socket, int numPlayers) throws SocketException {
             this.socket = socket;
             this.socket.setTcpNoDelay(true);
             playerNum = numPlayers;
             ready = false;
+            if(playerNum == 2){
+                xLoc = 200;
+                yLoc = 200;
+            }
             //datagramIn = new DatagramPacket(inByte, inByte.length);
         }
 
@@ -90,6 +120,7 @@ public class SimpleGameServer {
             try {
                 inStream = socket.getInputStream();
                 in = new BufferedReader(new InputStreamReader(inStream));
+                outStream = socket.getOutputStream();
                 out = new PrintWriter(socket.getOutputStream(), true);
                 clientIP = socket.getInetAddress();
                 
@@ -111,12 +142,14 @@ public class SimpleGameServer {
                         clienti.out.println(clientHandler.size());
                         for (ClientHandler clientj : clientHandler) {
                             clienti.out.println(clientj.playerNum + " " + clientj.ready);
+                            clienti.out.flush();
                         }
                         allReady = allReady && clienti.ready;
                     }
                     if (allReady) {
                         for (ClientHandler clienti : clientHandler) {
                             clienti.out.println("StartGame");
+                            clienti.out.flush();
                             //this ClientHandler is starting the game, but all the others are waiting for a line "GameStarted". I guess all the clients should send "GameStarted" except the client bound to this ClientHandler.
                         }
                         in.readLine();//throw out extra "GameStarted"
@@ -139,9 +172,26 @@ public class SimpleGameServer {
                 while(allReady){
                     //UDPsoc.receive(datagramIn);
                     //in.readLine();//ignore input for now
-                    System.out.println(this.playerNum + " is in the game loop.");
-                    System.out.println(inStream.read());
-                    elapsedSeconds += 10;
+                    //System.out.println(this.playerNum + " is in the game loop.");
+                    gameInput = inStream.read();
+                    System.out.println(gameInput);
+                    switch(gameInput){
+                        case 0://a
+                            xLoc--;
+                            break;
+                        case 1://s
+                            yLoc++;
+                            break;
+                        case 2://w
+                            yLoc--;
+                            break;
+                        case 3://d
+                            xLoc++;
+                            break;
+                        default:
+                            break;
+                    }
+                    //elapsedSeconds += 10;
                 }
             } catch (IOException e) {
                 System.out.println(e);

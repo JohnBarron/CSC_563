@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import javax.swing.JFrame;
@@ -20,6 +21,7 @@ import java.awt.event.WindowEvent;
 //import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.ArrayList;
+import javax.swing.Timer;
 
 public class SimpleGameClient extends Frame {
     private static final int PORT = 4446;
@@ -27,6 +29,7 @@ public class SimpleGameClient extends Frame {
     //private static final int UDPport = 4447;
     private BufferedReader in;
     private PrintWriter out;
+    private InputStream inStream;
     private OutputStream outStream;
     private JFrame frame = new JFrame("SimpleGameClient");
     private Graphics dbg;
@@ -52,13 +55,24 @@ public class SimpleGameClient extends Frame {
     private final byte[] wByte = new byte[] {0x02};
     private final byte[] dByte = new byte[] {0x03};
     private byte[] inByte = new byte[1];
+    private final int frameTimerDelay = 16;
+    private static javax.swing.Timer frameTimer;
     
+    private int gameInput;
+    private int xLoc = 0, yLoc = 0, xLoc2 = 0, yLoc2 = 0;
+    
+    ActionListener frameRenderTimer = new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+            repaint();
+        }
+    };
 
     public SimpleGameClient() {
         super("Simple Game");
         setSize(600, 600);
         setLocation(0, 0);
         //setUndecorated(true);
+        frameTimer = new Timer(frameTimerDelay, frameRenderTimer);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 System.exit(0);
@@ -112,9 +126,9 @@ public class SimpleGameClient extends Frame {
         String serverAddress = getServerAddress();
         Socket socket = new Socket(serverAddress, PORT);
         serverIP = socket.getInetAddress();
-        
+        inStream = socket.getInputStream();
         in = new BufferedReader(new InputStreamReader(
-                socket.getInputStream()));
+                inStream));
         outStream = socket.getOutputStream();
         out = new PrintWriter(outStream, true);
         frame.setVisible(false);
@@ -128,6 +142,7 @@ public class SimpleGameClient extends Frame {
             if(line.equals("StartGame")){
                 gameStarted = true;
                 out.println("GameStarted");
+                out.flush();
                 break;
             }
             numPlayers = new Integer(line);
@@ -155,10 +170,20 @@ public class SimpleGameClient extends Frame {
         //out.close();
         //socket.close();
         //UDPSoc = new DatagramSocket(UDPport, serverIP);
+        frameTimer.start();
         while(gameStarted){
             //UDPSoc.receive(serverPacket);
-            line = in.readLine();
-            repaint();
+            //line = in.readLine();
+            
+            gameInput = inStream.read();
+            xLoc = gameInput;
+            gameInput = inStream.read();
+            yLoc = gameInput;
+            gameInput = inStream.read();
+            xLoc2 = gameInput;
+            gameInput = inStream.read();
+            yLoc2 = gameInput;
+            //repaint();//put repaint() on a 16 milisecond timer
         }
 // Process all messages from server, according to the protocol.
   /*      while (true) {
@@ -186,7 +211,9 @@ public class SimpleGameClient extends Frame {
         }
         else {
             //g.drawString(new Byte(serverPacket.getData()[0]).toString(), width/2, width/2);
-            g.drawString(line, width/2, width/2);
+            //g.drawString(line, width/2, width/2);
+            g.fillOval(xLoc, yLoc, 10, 10);
+            g.fillOval(xLoc2, yLoc2, 10, 10);
         }
     }
     public void update(Graphics g) {
@@ -222,8 +249,10 @@ public class SimpleGameClient extends Frame {
                         ready = !ready;
                         if (ready) {
                             out.println("R");
+                            out.flush();
                         } else {
                             out.println("r");
+                            out.flush();
                         }
 
                     //} catch (IOException ex) {
@@ -235,21 +264,25 @@ public class SimpleGameClient extends Frame {
                     try {
                         if (c == 'a') {
                             outStream.write(aByte);
+                            outStream.flush();
                             //clientPacket = new DatagramPacket(aByte, aByte.length, UDPSoc.getInetAddress(), UDPport);
                             //UDPSoc.send(clientPacket);
                         }
                         else if (c == 's') {
                             outStream.write(sByte);
+                            outStream.flush();
                             //clientPacket = new DatagramPacket(sByte, sByte.length, UDPSoc.getInetAddress(), UDPport);
                             //UDPSoc.send(clientPacket);
                         }
                         else if (c == 'w') {
                             outStream.write(wByte);
+                            outStream.flush();
                             //clientPacket = new DatagramPacket(wByte, wByte.length, UDPSoc.getInetAddress(), UDPport);
                             //UDPSoc.send(clientPacket);
                         }
                         else if (c == 'd') {
                             outStream.write(dByte);
+                            outStream.flush();
                             //clientPacket = new DatagramPacket(dByte, dByte.length, UDPSoc.getInetAddress(), UDPport);
                             //UDPSoc.send(clientPacket);
                         }
