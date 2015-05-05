@@ -90,11 +90,11 @@ public class SocketServer {
             int yLoc = (int)c.ship.getyLoc();
             if(i == 0) {
                 temp = "5|" + c.playerName + "|" + c.ship.colorRandom + "|" +
-                        xLoc + "|" + yLoc + "|0";
+                        xLoc + "|" + yLoc + "|" + c.ship.coinsCollected;
             }
             else {
                 temp = ",5|" + c.playerName + "|" + c.ship.colorRandom + "|" +
-                        xLoc + "|" + yLoc + "|0";
+                        xLoc + "|" + yLoc + "|" + c.ship.coinsCollected;
             }
             output += temp;
             i++;
@@ -119,6 +119,34 @@ public class SocketServer {
         System.out.println(output);
         SendOutputToAll(output);
 
+    }
+    
+    public void checkForCollision(Ship ship) {
+        for(int j=0; j<s1.numCoins; j++){
+            if(org.apache.commons.math.util.FastMath.sqrt((ship.getxLoc() - s1.getCoin()[j].getxLoc()) * (ship.getxLoc() - s1.getCoin()[j].getxLoc()) + (ship.getyLoc() - s1.getCoin()[j].getyLoc()) * (ship.getyLoc() - s1.getCoin()[j].getyLoc())) < ship.getSize() + s1.getCoin()[j].getSize()){
+                //ship[i].setFuel(ship[i].getFuel() + 1);
+                ship.coinsCollected++;
+                s1.getCoin()[j] = new Coin(arenaWidth, arenaHeight);
+            }
+        }
+        String output = "";
+        String temp = "";
+        for(int i=0; i < s1.numCoins; i++){
+            int xLoc = (int)s1.getCoin()[i].getxLoc();
+            int yLoc = (int)s1.getCoin()[i].getyLoc();
+            if(i == 0) {
+                temp = "6|" + s1.getCoin()[i].getColor().getRGB() + "|" + 
+                        xLoc + "|" + yLoc;
+            }
+            else {
+                temp = ",6|" + s1.getCoin()[i].getColor().getRGB() + "|" + 
+                        xLoc + "|" + yLoc;
+            }
+            output += temp;
+            i++;
+        }
+        System.out.println(output);
+        SendOutputToAll(output);
     }
 }
 
