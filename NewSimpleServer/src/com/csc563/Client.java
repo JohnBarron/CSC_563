@@ -50,7 +50,8 @@ public class Client implements Runnable{
                     input = in.readLine();
                 } catch(SocketException se) {
                     this.socket.close();
-                    CheckConnectionAlive();
+                    server.ConnectedClients.remove(this);
+                    //CheckConnectionAlive();
                 }
 
                 if(!input.contains("|")){
@@ -94,21 +95,47 @@ public class Client implements Runnable{
                             server.createPhysicsSpace();
                         }
                         break;
-                    case 3: // Post comment
-                        out.println("1|Cannot post a comment as another user");
-                        out.flush();
-                        break;
-                    case 7:  // Log out
-                        out.println("1|You cannot log out another user.");
-                        out.flush();
-                        break;
-                    case 10: // Add New User
-                        out.println("1|Not authorized to add a new user");
-                        out.flush();
-                        break;
-                    default:
-                        out.println("1|Error on command syntax [" + input +"]");
-                        out.flush();
+                    case 7:
+                        String keyPressed = splitter[2];
+                        int i = 0;
+                        String temp = "";
+                        output = ""; 
+                        for (Object cl : server.ConnectedClients) {
+                            Client c = (Client) cl;
+                            int xLoc = (int)c.ship.getxLoc();
+                            int yLoc = (int)c.ship.getyLoc();
+                            if(c.playerName.equalsIgnoreCase(splitter[1])) {
+                                switch(keyPressed) {
+                                    case "a":
+                                        xLoc--;
+                                        c.ship.setxLoc((double)xLoc);
+                                        break;
+                                    case "s":
+                                        yLoc++;
+                                        c.ship.setyLoc((double)yLoc);
+                                        break;
+                                    case "w":
+                                        yLoc--;
+                                        c.ship.setyLoc((double)yLoc);
+                                        break;
+                                    case "d":
+                                        xLoc++;
+                                        c.ship.setxLoc((double)xLoc);
+                                        break;
+                                }
+                            }
+                            if(i == 0) {
+                                temp = "5|" + c.playerName + "|" + c.ship.colorRandom + "|" +
+                                        xLoc + "|" + yLoc + "|0";
+                            }
+                            else {
+                                temp = ",5|" + c.playerName + "|" + c.ship.colorRandom + "|" +
+                                        xLoc + "|" + yLoc + "|0";
+                            }
+                            output += temp;
+                            i++;
+                        }
+                        server.SendOutputToAll(output);
                         break;
                 }
 

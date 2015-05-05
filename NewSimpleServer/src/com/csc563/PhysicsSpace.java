@@ -17,7 +17,7 @@ public class PhysicsSpace {
     //private double[][] previousAngle;
     private double minDistanceToCursor;
     private double dTemp; // used in findNearestPlanet()
-    private int numShips, numStars, numPlanets, numCoins;
+    public int numShips, numStars, numPlanets, numCoins;
     SpaceToWindow window;
     private Random rng;
     int i = 0, j = 0;
