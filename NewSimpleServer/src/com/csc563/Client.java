@@ -82,7 +82,7 @@ public class Client implements Runnable{
                             System.out.println("Client is in ready state.");
                         }
                         if(server.ConnectedClients.size() == 1) {
-                            output = "3|Wait for other user to join.";
+                            output = "3|Wait for other players to join.";
                             server.SendOutputToAll(output);
 //                            out.println(output);
                         } else {
